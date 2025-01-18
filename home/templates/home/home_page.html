@@ -1,11 +1,280 @@
 {% extends "base.html" %}
-
-<!-- load wagtailcore_tags by adding this: -->
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
-<!-- replace everything below with: -->
 {% block content %}
-    {{ page.body|richtext }}
-{% endblock %}
+  <section id="hero" class="px-[5%] py-16 md:py-24 lg:py-20">
+    <div class="container">
+      <div
+        class="rb-12 mb-12 grid grid-cols-1 items-start gap-x-12 gap-y-5 md:mb-18 md:grid-cols-2 md:gap-y-8 lg:mb-20 lg:gap-x-20 lg:gap-y-16"
+      >
+        <div>
+          <h1 class="text-6xl font-bold md:text-9xl lg:text-10xl">
+            {{ page.hero_text }}
+          </h1>
+        </div>
+        <div>
+          <p class="md:text-md">
+            {{ page.body|richtext }}
+          </p>
+          <div class="mt-6 flex flex-wrap gap-4 md:mt-8">
+            {% if page.hero_cta_link %}
+            <a href="{% pageurl page.hero_cta_link %}">
+                
+                <button
+                class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
+                title="View My CV"
+              >
+              {% firstof page.hero_cta page.hero_cta_link.title %}</button
+              >
+            </a>
+            {% endif %}
+            <button
+              class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3"
+              title="Contact Me"
+            >
+              Contact Me
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        {% image page.image fill-1920x1080 %}
+      </div>
+    </div>
+  </section>
+  
+
+  
+  <section id="" class="px-[5%] py-16 md:py-24 lg:py-28">
+    <div class="container">
+      <div
+        class="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:items-center md:gap-x-12 lg:gap-x-20"
+      >
+        <div>
+          <p class="mb-3 font-semibold md:mb-4">Innovator</p>
+          <h1
+          class="rb-5 mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl"
+        >
+          Exploring the Frontiers of Life Sciences
+        </h1>
+          <p class="md:text-md mt-10">
+            April D&#x27;Arcy is a dedicated researcher specialising in
+            immunology, virology, and cancer biology. With a PhD from the
+            University of Cambridge, she is committed to advancing scientific
+            knowledge and public health.
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
+            <button
+              class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3"
+              title="View CV"
+            >
+            View CV</button>
+            <button
+              class="focus-visible:ring-border-primary inline-flex items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-0  gap-2 p-0"
+              title="Contact"
+            >
+              Contact<svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="0"
+                viewBox="0 0 15 15"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div>
+          <img
+            src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
+            class="w-full object-cover"
+            alt="Relume placeholder image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="" class="px-[5%] py-16 md:py-24 lg:py-28">
+    <div class="container">
+      <div class="flex flex-col items-start">
+        <div class="rb-12 mb-12 w-full max-w-lg md:mb-18 lg:mb-20">
+          <h3 class="text-4xl font-bold leading-[1.2] md:text-5xl lg:text-6xl">
+            April D&#x27;Arcy: Immunology and Virology Expert Ready for New
+            Challenges
+          </h3>
+        </div>
+        <div
+          class="grid grid-cols-1 items-start gap-y-12 md:grid-cols-3 md:gap-x-8 md:gap-y-16 lg:gap-x-12"
+        >
+          <div>
+            <div class="rb-5 mb-5 md:mb-6">
+              <img
+                src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
+                alt="Relume logo 1"
+                class="size-12"
+              />
+            </div>
+            <h3 class="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
+              Recent PhD Graduate with a Passion for Cancer Biology Research
+            </h3>
+            <p class="mb-5 md:mb-6">
+              April&#x27;s research focuses on innovative therapies targeting
+              cancer through oncolytic virotherapy.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
+              <button
+                class="focus-visible:ring-border-primary inline-flex items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-0  gap-2 p-0"
+              >
+                View CV<svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="0"
+                  viewBox="0 0 15 15"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="rb-5 mb-5 md:mb-6">
+              <img
+                src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
+                alt="Relume logo 1"
+                class="size-12"
+              />
+            </div>
+            <h3 class="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
+              Dedicated to Advancing Scientific Knowledge and Public Health
+              Initiatives
+            </h3>
+            <p class="mb-5 md:mb-6">
+              She actively engages in outreach, bridging science and community
+              understanding.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
+              <button
+                class="focus-visible:ring-border-primary inline-flex items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-0  gap-2 p-0"
+              >
+                Contact<svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="0"
+                  viewBox="0 0 15 15"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="rb-5 mb-5 md:mb-6">
+              <img
+                src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
+                alt="Relume logo 1"
+                class="size-12"
+              />
+            </div>
+            <h3 class="mb-5 text-xl font-bold md:mb-6 md:text-2xl">
+              Driven Researcher Eager to Collaborate and Innovate in the Field
+            </h3>
+            <p class="mb-5 md:mb-6">
+              April aims to contribute to impactful research and industry
+              solutions.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
+              <button
+                class="focus-visible:ring-border-primary inline-flex items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-0  gap-2 p-0"
+              >
+                Connect<svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="0"
+                  viewBox="0 0 15 15"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="relume" class="px-[5%] py-16 md:py-24 lg:py-28">
+    <div class="container">
+      <div
+        class="grid grid-cols-1 gap-x-20 gap-y-12 md:gap-y-16 lg:grid-cols-2 lg:items-center"
+      >
+        <div>
+          <h2
+            class="rb-5 mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl"
+          >
+            Explore My Professional Journey
+          </h2>
+          <p class="md:text-md">
+            Discover my CV or get in touch to discuss exciting job opportunities
+            in research and industry.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-4 md:mt-8">
+            <button
+              class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
+              title="View CV"
+            >
+              View CV</button
+            ><button
+              class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3"
+              title="Contact"
+            >
+              Contact
+            </button>
+          </div>
+        </div>
+        <div>
+          <img
+            src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+            class="w-full object-cover"
+            alt="Relume placeholder image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  
+{% endblock content %}
