@@ -23,6 +23,7 @@ draftjs-exporter==5.0.0
 environ==1.0
 et_xmlfile==2.0.0
 filetype==1.2.0
+gunicorn==23.0.0
 idna==3.10
 Jinja2==3.1.5
 l18n==2021.3
@@ -31,6 +32,7 @@ markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
 openpyxl==3.1.5
+packaging==24.2
 pillow==11.1.0
 pillow_heif==0.21.0
 Pygments==2.19.1
@@ -50,4 +52,5 @@ types-python-dateutil==2.9.0.20241206
 tzdata==2024.2
 urllib3==2.3.0
 wagtail==6.3.2
+whitenoise==6.8.2
 Willow==1.9.0

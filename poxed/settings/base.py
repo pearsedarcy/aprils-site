@@ -15,7 +15,7 @@ import os
 
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
@@ -147,6 +147,9 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
     os.path.join(BASE_DIR, "theme/static/css"),
@@ -174,6 +177,7 @@ STORAGES = {
     },
 }
 
+ALLOWED_HOSTS = ['*.herokuapp.com']
 
 # Wagtail settings
 

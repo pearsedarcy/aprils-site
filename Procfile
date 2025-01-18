@@ -1,1 +1,1 @@
-web: gunicorn poxed.wsgi
+web: gunicorn poxed.wsgi --log-file - 
