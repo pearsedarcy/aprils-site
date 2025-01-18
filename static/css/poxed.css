@@ -1,0 +1,40 @@
+.skip-link {
+    position: absolute;
+    top: 30px;
+  }
+  
+  .skip-link:focus   {
+    top: 5px;
+  }
+
+/* General styling */
+.skip-link:focus {
+    position: fixed;
+    top: 500px;
+    left: 50%;
+    transform: translateX(-100%);
+    padding: 0.5rem 1rem;
+    background: #000;       
+    z-index: 1000;
+    text-decoration: none;  
+}
+
+/* Header styling */
+#page-header {
+    transition: all 0.3s ease;
+}
+
+/* Navigation styling */
+nav {
+    transition: opacity 0.3s ease, height 0.3s ease;
+}
+
+/* Mobile menu transitions */
+#mobile-menu > div {
+    transition: transform 0.3s ease;
+}
+
+a {
+    font-weight: 500;
+    
+}
