@@ -191,11 +191,12 @@
   <div
     id="mobile-menu"
     class="absolute left-0 right-0 top-full w-full overflow-hidden lg:hidden"
-    style="height: auto"
+    style="height: 100vh"
   >
     <div
+      id="mobile-menu-content"
       class="absolute left-0 right-0 top-0 block h-dvh overflow-auto border-b border-border-primary bg-background-primary px-[5%] pb-8 pt-4"
-      style="transform: translateY(-100%)"
+      style="transform: translateY(-100%); display: none;"
     > 
       <div class="flex flex-col">
         <a href="#" class="block py-3 text-md">Link One</a
@@ -341,6 +342,34 @@
       </div>
     </div>
   </div>
+  <script>
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const menuButton = document.getElementById('mobile-menu-button');
+        const spans = menuButton.getElementsByTagName('span');
+        
+        if (mobileMenuContent.style.transform === 'translateY(0%)') {
+          // Close menu
+            mobileMenuContent.style.transform = 'translateY(-100%)';
+            mobileMenuContent.style.display = 'none';
+            mobileMenu.style.display = 'none';
+          // Reset hamburger
+          spans[0].style.transform = 'rotate(0) translateY(0)';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'rotate(0) translateY(0)';
+        } else {
+          // Open menu
+            mobileMenuContent.style.transform = 'translateY(0%)';
+            mobileMenuContent.style.display = 'block';
+            mobileMenu.style.display = 'block';
+          // Create X
+          spans[0].style.transform = 'rotate(45deg) translateY(8px)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'rotate(-45deg) translateY(-8px)';
+        }
+    });
+  </script>
   {% wagtailuserbar "bottom-right" %}
 </header>
 <script src="{% static 'js/poxed.js' %}"></script>

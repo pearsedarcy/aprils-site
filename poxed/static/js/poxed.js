@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-
     // Dropdown menu functionality
     const dropdownButtons = document.querySelectorAll('#page-header button:has(svg)');
     
