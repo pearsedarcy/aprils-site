@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 
 
-DEBUG = False
+DEBUG = True
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -151,7 +151,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
-    os.path.join(BASE_DIR, "theme/static/css/dist"),
+    os.path.join(BASE_DIR, "theme/static/css"),
     
 ]
 
