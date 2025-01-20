@@ -10,9 +10,14 @@
       <h1 class="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">
         {{ page.title }}
       </h1>
-      <p class="md:text-md">
+      <h2 class="md:text-md">
         {{ page.sub_title|richtext }}
-      </p>
+      </h2>
+
+        <a href="{{ page.button_url }}" target="_blank" class="btn btn-primary mt-8">
+          {{ page.button_text }}
+        </a>
+
     </div>
   </section>
   {{ page.body }}

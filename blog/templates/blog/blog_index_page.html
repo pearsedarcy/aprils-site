@@ -5,20 +5,53 @@
 {% block body_class %}template-blogindexpage{% endblock %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-brand-primary mb-4">{{ page.title }}</h1>
 
-    <div class="intro">{{ page.intro|richtext }}</div>
-    {{ page.header|richtext}}
+        {% if page.intro %}
+        <div class="prose lg:prose-lg max-w-none mb-8 text-neutral-dark">
+            {{ page.intro|richtext }}
+        </div>
+        {% endif %}
 
-    {% for post in blogpages %}
-        {% with post=post.specific %}
-            <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-            {% with post.main_image as main_image %}
-            {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
-            {% endwith %}
-            <p>{{ post.intro }}</p>
-            {{ post.body|richtext }}
-        {% endwith %}
-    {% endfor %}
+        {% if page.header %}
+        <div class="prose lg:prose-lg max-w-none mb-12 text-neutral-dark">
+            {{ page.header|richtext }}
+        </div>
+        {% endif %}
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for post in blogpages %}
+                {% with post=post.specific %}
+                    <a href="{% pageurl post %}" class="group block">
+                        <article class="bg-white rounded-lg shadow-medium hover:shadow-large transition-shadow duration-300 overflow-hidden h-full border border-neutral-lightest hover:border-brand-secondary">
+                            {% with post.main_image as main_image %}
+                                {% if main_image %}
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        {% image main_image fill-800x450 class="w-full h-full object-cover" %}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                            
+                            <div class="p-6">
+                                <h2 class="text-xl font-bold mb-3 text-brand-primary group-hover:text-brand-secondary transition-colors duration-300">
+                                    {{ post.title }}
+                                </h2>
+                                
+                                {% if post.intro %}
+                                <p class="text-neutral mb-4 line-clamp-3">
+                                    {{ post.intro }}
+                                </p>
+                                {% endif %}
+                                
+                                <div class="prose prose-sm max-w-none text-neutral-dark">
+                                    {{ post.body|richtext }}
+                                </div>
+                            </div>
+                        </article>
+                    </a>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

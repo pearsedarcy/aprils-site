@@ -1,0 +1,72 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<section id="card-block-1" class="px-[5%] py-8 md:py-10 lg:py-12">
+  <div class="container grid grid-cols-1 gap-y-12 md:grid-cols-2 md:items-center md:gap-x-12 lg:gap-x-20"
+    >
+
+
+    <div class="animate-fade-left">
+ 
+      {% if self.image %}
+      {% image self.image width-480 %}
+      {% endif %}
+    </div>
+    <div class="animate-fade-up
+      rb-5 mb-5  md:mb-6"
+      >
+      {% if self.card_tag %}
+      <div class="animate-fade-up">
+        <div class="bg-brand-primary text-white px-3 py-1 inline-block
+        rounded-full text-sm font-semibold mb-4">
+          {{ self.card_tag }}
+        </div>
+      </div>
+      {% endif %}
+      <h3 class="text-4xl font-bold mb-4">
+      {{ self.heading }}
+      </h3>
+      <h4 class="text-xl font-semibold mb-3">
+      {{ self.sub_heading }}
+      </h4>
+      <p class="text-base leading-relaxed">
+      {{ self.text|richtext }}
+      </p>
+
+        {{ self.button1 }}
+
+    </div>
+
+    
+  </div>
+</section>
+
+<style>
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s ease-out;
+}
+
+.animate-fade-left {
+  animation: fadeLeft 0.7s ease-out;
+}
+</style>
