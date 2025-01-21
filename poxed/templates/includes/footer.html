@@ -1,4 +1,6 @@
-{% load wagtailcore_tags navigation_tags %}
+{% load wagtailcore_tags navigation_tags wagtailimages_tags %}
+{% get_footer_config as footer_config %}
+
 <footer id="page-footer" class="px-[5%] py-12 md:py-18 lg:py-20">
     <div class="container">
 
@@ -6,8 +8,8 @@
         class="rb-12 mb-12 block items-start justify-between md:mb-18 lg:mb-20 lg:flex"
       >
         <div class="rb-6 mb-6 lg:mb-0">
-          <h1 class="font-semibold md:text-md">Subscribe to updates</h1>
-          <p>Stay informed about my latest research and insights.</p>
+          <h1 class="font-semibold md:text-md">{{ footer_config.subscribe_title }}</h1>
+          <p>{{ footer_config.subscribe_description }}</p>
         </div>
         <div class="max-w-md lg:min-w-[25rem]">
           <form
@@ -26,22 +28,21 @@
               class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-5 py-2"
               title="Join"
             >
-              Join
+              {{ footer_config.subscribe_button_text }}
             </button>
           </form>
-          <p class="text-xs">By subscribing, you agree to our Privacy Policy.</p>
+          <p class="text-xs">{{ footer_config.privacy_text }}</p>
         </div>
       </div>
       <div
         class="rb-12 mb-12 grid grid-cols-1 items-start gap-x-8 gap-y-10 sm:grid-cols-3 md:mb-18 md:gap-y-12 lg:mb-20 lg:grid-cols-6"
       >
+        {% if footer_config.footer_logo %}
         <a
           href="#"
           class="sm:col-start-1 sm:col-end-4 sm:row-start-1 sm:row-end-2 lg:col-start-auto lg:col-end-auto lg:row-start-auto lg:row-end-auto"
-          ><img
-            src="https://d22po4pjz3o32e.cloudfront.net/logo-image.svg"
-            alt="Logo image"
-        /></a>
+          >{% image footer_config.footer_logo width-165 alt="Footer Logo" %}</a>
+        {% endif %}
         <div class="flex flex-col items-start justify-start">
           <h2 class="mb-3 font-semibold md:mb-4">Quick Links</h2>
           <ul>

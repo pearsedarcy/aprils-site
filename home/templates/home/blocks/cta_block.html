@@ -1,0 +1,31 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="px-[5%] py-16 md:py-24 lg:py-28">
+  <div class="container">
+    <div class="grid grid-cols-1 gap-x-20 gap-y-12 md:gap-y-16 lg:grid-cols-2 lg:items-center">
+      <div>
+        <h2 class="rb-5 mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+          {{ value.heading }}
+        </h2>
+        <div class="md:text-md">{{ value.text|richtext }}</div>
+        <div class="mt-6 flex flex-wrap gap-4 md:mt-8">
+          {% if value.primary_button_text %}
+            <a href="{{ value.primary_button_url }}" class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3">
+              {{ value.primary_button_text }}
+            </a>
+          {% endif %}
+          {% if value.secondary_button_text %}
+            <a href="{{ value.secondary_button_url }}" class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3">
+              {{ value.secondary_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      {% if value.image %}
+        <div>
+          {% image value.image width-800 class="w-full object-cover" %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

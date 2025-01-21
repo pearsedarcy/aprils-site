@@ -1,0 +1,36 @@
+{% load wagtailcore_tags %}
+
+<section class="px-[5%] py-8 md:py-8 lg:py-10">
+  {% if value.title %}
+    <div class="container mb-12 w-full max-w-lg md:mb-18 lg:mb-20 text-center">
+      <h2 class="text-4xl font-bold leading-[1.2] md:text-5xl lg:text-6xl">
+        {{ value.title }}
+      </h2>
+      {% if value.intro_text %}
+        <div class="mt-6 md:text-md">
+          {{ value.intro_text|richtext }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  
+  <div class="relative w-full">
+    <div class="flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+      {% for feature in value.features %}
+        <div class="snap-start flex-none w-[300px] md:w-[400px]">
+          {% include "home/blocks/feature_block.html" with value=feature %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

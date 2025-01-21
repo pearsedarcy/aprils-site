@@ -2,7 +2,7 @@ from django import template
 
 from wagtail.models import Site
 
-from base.models import FooterText
+from base.models import FooterText, HeaderConfiguration, FooterConfiguration
 
 register = template.Library()
 
@@ -22,3 +22,11 @@ def get_footer_text(context):
 @register.simple_tag(takes_context=True)
 def get_site_root(context):
     return Site.find_for_request(context["request"]).root_page
+
+@register.simple_tag
+def get_header_config():
+    return HeaderConfiguration.objects.filter(live=True).first()
+
+@register.simple_tag
+def get_footer_config():
+    return FooterConfiguration.objects.filter(live=True).first()
