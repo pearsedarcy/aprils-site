@@ -1,4 +1,3 @@
-
 from wagtail.blocks import (
     CharBlock,
     ListBlock,
@@ -18,25 +17,27 @@ from base.blocks import BaseStreamBlock
 
 # add CardBlock:
 class CardBlock(StructBlock):
-    heading = CharBlock()
-    sub_heading = CharBlock(required=False)
-    text = RichTextBlock(features=["bold", "italic", "link"])
-    image = ImageBlock(required=False)
-
-    class Meta:
-        icon = "form"
-        template = "portfolio/blocks/card_block.html"
-
-class CardBlock2(StructBlock):
     card_tag = CharBlock(required=False)
     heading = CharBlock()
     sub_heading = CharBlock(required=False)
     text = RichTextBlock(features=["bold", "italic", "link"])
-    image = ImageBlock()
+    image = ImageBlock(required=False)
+    image_position = ChoiceBlock(
+        choices=[
+            ('left', 'Left'),
+            ('right', 'Right'),
+        ],
+        default='right',
+        required=True,
+    )
+    primary_button_text = CharBlock(required=False)
+    primary_button_url = URLBlock(required=False)
+    secondary_button_text = CharBlock(required=False)
+    secondary_button_url = URLBlock(required=False)
 
     class Meta:
         icon = "form"
-        template = "portfolio/blocks/card_block_2.html"
+        template = "portfolio/blocks/card_block.html"
 
 # add FeaturedPostsBlock:
 class FeaturedPostsBlock(StructBlock):
@@ -49,8 +50,5 @@ class FeaturedPostsBlock(StructBlock):
         template = "portfolio/blocks/featured_posts_block.html"
 
 class PortfolioStreamBlock(BaseStreamBlock):
-    # delete the pass statement
-
     card = CardBlock(group="Sections")
-    card2 = CardBlock2(group="Sections")
     featured_posts = FeaturedPostsBlock(group="Sections")

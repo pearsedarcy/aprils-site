@@ -5,7 +5,7 @@
 {% block body_class %}template-portfolio{% endblock %}
 
 {% block content %}
-<section id="page-header-1" class="px-[5%] py-8 md:py-10 lg:py-14">
+<section id="page-header-1" class="px-[5%] py-6 md:py-4 lg:py-6">
     <div class="container max-w-lg text-center">
       <h1 class="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">
         {{ page.title }}
@@ -13,11 +13,6 @@
       <h2 class="md:text-md">
         {{ page.sub_title|richtext }}
       </h2>
-
-        <a href="{{ page.button_url }}" target="_blank" class="btn btn-primary mt-8">
-          {{ page.button_text }}
-        </a>
-
     </div>
   </section>
   {{ page.body }}
