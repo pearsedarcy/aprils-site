@@ -1,15 +1,20 @@
+<!-- Load required template tags -->
 {% load static wagtailcore_tags wagtailimages_tags navigation_tags wagtailuserbar %}
 
+<!-- Get site root and header configuration -->
 {% get_site_root as site_root %}
 {% get_header_config as header_config %}
 
+<!-- Main Header Component
+   - Contains logo, navigation menu, action buttons, and mobile menu
+   - Uses z-index 999 to ensure header stays above other content
+   - Responsive design with mobile-first approach -->
 <header
   id="page-header"
   class="relative z-[999] flex min-h-16 w-full items-center border-b border-border-primary px-[5%] md:min-h-18"
 >
-  <a href="#main" class="skip-link" style="
-    position: absolute;
-    top: -30px;">Skip to content</a>
+  <!-- Accessibility skip link -->
+  <a href="#main" class="skip-link" style="position: absolute; top: -30px;">Skip to content</a>
   <div class="mx-auto flex size-full max-w-full items-center justify-between">
     <a href="{% pageurl site_root %}">
       {% if header_config.logo %}
@@ -19,6 +24,9 @@
              alt="Default Logo" height="40" width="40" />
       {% endif %}
     </a>
+    <!-- Desktop Navigation Menu
+        - Hidden on mobile, visible on large screens (lg)
+        - Contains main menu items and action buttons -->
     <div
       class="absolute hidden h-screen overflow-auto border-b border-border-primary  px-[5%] pb-24 pt-4 md:pb-0 lg:static lg:ml-6 lg:flex lg:h-auto lg:flex-1 lg:items-center lg:justify-between lg:border-none lg:bg-none lg:px-0 lg:pt-0"
     >
@@ -29,139 +37,6 @@
         lg:py-6 lg:text-base">{{ menuitem.title }}</a>
         {% if not forloop.last %} {% endif %}
         {% endfor %}
-        <a
-          href="#"
-          class="relative block w-auto py-3 text-md lg:inline-block lg:px-4 lg:py-6 lg:text-base"
-          >About Me</a
-        ><a
-          href="#"
-          class="relative block w-auto py-3 text-md lg:inline-block lg:px-4 lg:py-6 lg:text-base"
-          >Research Work</a
-        >
-        <div>
-          <button
-            class="relative flex w-full items-center justify-between whitespace-nowrap py-3 text-md lg:w-auto lg:justify-start lg:gap-2 lg:px-4 lg:py-6 lg:text-base"
-          >
-            <span>Achievements</span
-            ><span
-              ><svg
-                stroke="currentColor"
-                fill="none"
-                stroke-width="0"
-                viewBox="0 0 15 15"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
-                  fill="currentColor"
-                ></path></svg></span>
-          </button>
-          <nav
-            class="bottom-auto left-0 top-full w-full min-w-full max-w-full overflow-hidden bg-background-primary lg:absolute lg:w-screen lg:border-b lg:border-border-primary lg:px-[5%] lg:[--height-close:auto]"
-            style="opacity: 0; height: var(--height-close, 0); display: none"
-          >
-            <div
-              class="mx-auto flex size-full max-w-full items-center justify-between"
-            >
-              <div class="flex w-full flex-col lg:flex-row">
-                <div
-                  class="grid flex-1 grid-cols-1 content-start items-start gap-x-8 gap-y-2 py-4 md:grid-cols-2 md:gap-y-6 md:py-8 lg:auto-cols-fr lg:grid-cols-4 lg:content-stretch lg:items-stretch lg:gap-y-0"
-                >
-                  <a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 1"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Contact Me</h5>
-                      <p class="hidden text-sm md:block">
-                        Explore my academic journey and research focus.
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 1"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Blog Insights</h5>
-                      <p class="hidden text-sm md:block">
-                        Read my thoughts on current research topics.
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 1"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Download CV</h5>
-                      <p class="hidden text-sm md:block">
-                        Access my latest publications and achievements.
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 1"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Social Links</h5>
-                      <p class="hidden text-sm md:block">
-                        Connect with me on LinkedIn and more.
-                      </p>
-                    </div></a
-                  >
-                </div>
-              </div>
-            </div>
-            <div
-              class="relative mb-6 flex w-full flex-col items-start justify-between p-6 sm:items-center lg:mb-0 lg:flex-row lg:px-0 lg:py-3"
-            >
-              <div
-                class="absolute -left-[50vw] -right-[50vw] bottom-0 top-0 w-[200vw] bg-background-secondary"
-              ></div>
-              <div
-                class="relative z-10 mr-auto flex flex-col gap-y-4 sm:mx-auto sm:grid sm:auto-cols-fr sm:grid-cols-[max-content_max-content] sm:gap-x-1"
-              >
-                <p>Seeking exciting new opportunities?</p>
-                <a href="#" class="underline">Reach out now</a>
-              </div>
-            </div>
-          </nav>
-        </div>
       </div>
       <div class="flex items-center gap-4">
         {% if header_config.cv_button_link %}
@@ -174,27 +49,42 @@
              class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-5 py-2"
           >{{ header_config.contact_button_text }}</a>
         {% endif %}
-        <a href="/search/">    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg></a>
+        <a href="/search/" 
+           class="focus-visible:ring-border-primary inline-flex items-center justify-center p-2 hover:bg-background-alternative rounded-full transition-colors"
+           aria-label="Search site">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </a>
       </div>
-      
-
     </div>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu Toggle Button 
+        - Only visible on mobile/tablet screens
+        - Controls mobile menu visibility
+        - Includes hamburger and close icons -->
     <button
       id="mobile-menu-button"
-      class="-mr-2 flex size-12 cursor-pointer flex-col items-center justify-center lg:hidden"
+      class="-mr-2 flex size-12 cursor-pointer items-center justify-center lg:hidden"
       aria-expanded="false"
       aria-label="Toggle mobile menu"
     >
-      <span class="my-[3px] h-0.5 w-6 bg-black"></span>
-      <span class="my-[3px] h-0.5 w-6 bg-black"></span>
-      <span class="my-[3px] h-0.5 w-6 bg-black"></span>
+      <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="6" x2="20" y2="6"></line>
+        <line x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+      <svg class="close-icon hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
     </button>
   </div>
+  <!-- Mobile Menu Container
+      - Full-width overlay menu
+      - Hidden by default
+      - Slides in from top when activated -->
   <div
     id="mobile-menu"
     class="absolute left-0 right-0 top-full w-full overflow-hidden hidden "
@@ -206,177 +96,68 @@
       style="transform: translateY(-100%); display: none;"
     > 
       <div class="flex flex-col">
-        <a href="#" class="block py-3 text-md">Link One</a
-        ><a href="#" class="block py-3 text-md">Link Two</a
-        ><a href="#" class="block py-3 text-md">Link Three</a>
-        <div>
-          <button
-            class="relative flex w-full items-center justify-between whitespace-nowrap py-3 text-md lg:w-auto lg:justify-start lg:gap-2 lg:px-4 lg:py-6 lg:text-base"
-          >
-            <span>Link Four</span
-            ><span
-              ><svg
-                stroke="currentColor"
-                fill="none"
-                stroke-width="0"
-                viewBox="0 0 15 15"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z"
-                  fill="currentColor"
-                ></path></svg></span>
-          </button>
-          <nav
-            class="bottom-auto left-0 top-full w-full min-w-full max-w-full overflow-hidden bg-background-primary lg:absolute lg:w-screen lg:border-b lg:border-border-primary lg:px-[5%] lg:[--height-close:auto]"
-            style="opacity: 0; height: var(--height-close, 0); display: none"
-          >
-            <div
-              class="mx-auto flex size-full max-w-full items-center justify-between"
-            >
-              <div class="flex w-full flex-col lg:flex-row">
-                <div
-                  class="grid flex-1 grid-cols-1 content-start items-start gap-x-8 gap-y-2 py-4 md:grid-cols-2 md:gap-y-6 md:py-8 lg:auto-cols-fr lg:grid-cols-4 lg:content-stretch lg:items-stretch lg:gap-y-0"
-                >
-                  <a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 1"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Page one</h5>
-                      <p class="hidden text-sm md:block">
-                        Lorem ipsum dolor sit amet consectetur elit
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 2"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Page two</h5>
-                      <p class="hidden text-sm md:block">
-                        Lorem ipsum dolor sit amet consectetur elit
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 3"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Page three</h5>
-                      <p class="hidden text-sm md:block">
-                        Lorem ipsum dolor sit amet consectetur elit
-                      </p>
-                    </div></a
-                  ><a
-                    href="#"
-                    class="grid w-full auto-cols-fr grid-cols-[max-content_1fr] items-start gap-x-3 py-2"
-                    ><div
-                      class="flex size-6 flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://d22po4pjz3o32e.cloudfront.net/relume-icon.svg"
-                        alt="Icon 4"
-                        class="shrink-0"
-                      />
-                    </div>
-                    <div class="flex flex-col items-start justify-center">
-                      <h5 class="font-semibold">Page four</h5>
-                      <p class="hidden text-sm md:block">
-                        Lorem ipsum dolor sit amet consectetur elit
-                      </p>
-                    </div></a
-                  >
-                </div>
-              </div>
-            </div>
-            <div
-              class="relative mb-6 flex w-full flex-col items-start justify-between p-6 sm:items-center lg:mb-0 lg:flex-row lg:px-0 lg:py-3"
-            >
-              <div
-                class="absolute -left-[50vw] -right-[50vw] bottom-0 top-0 w-[200vw] bg-background-secondary"
-              ></div>
-              <div
-                class="relative z-10 mr-auto flex flex-col gap-y-4 sm:mx-auto sm:grid sm:auto-cols-fr sm:grid-cols-[max-content_max-content] sm:gap-x-1"
-              >
-                <p>Looking for a new career?</p>
-                <a href="#" class="underline">Get in touch</a>
-              </div>
-            </div>
-          </nav>
-        </div>
+        {% for menuitem in site_root.get_children.live.in_menu %}
+        <a href="{% pageurl menuitem %}" class="block py-3 text-md">{{ menuitem.title }}</a>
+        {% endfor %}
         <div class="mt-6 flex flex-col gap-4">
-          <button
-            class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-5 py-2"
-            title="Button"
-          >
-            Button</button
-          ><button
-            class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-5 py-2"
-            title="Button"
-          >
-            Button
-          </button>
+          {% if header_config.cv_button_link %}
+            <a href="{{ header_config.cv_button_link }}"
+               class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-5 py-2"
+            >{{ header_config.cv_button_text }}</a>
+          {% endif %}
+          {% if header_config.contact_button_link %}
+            <a href="{{ header_config.contact_button_link }}"
+               class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-5 py-2"
+            >{{ header_config.contact_button_text }}</a>
+          {% endif %}
+          <a href="/search/" 
+             class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-5 py-2"
+             aria-label="Search site">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Search
+          </a>
         </div>
       </div>
     </div>
   </div>
+  <!-- Mobile Menu JavaScript
+      - Handles mobile menu open/close animations
+      - Updates ARIA states
+      - Manages icon transitions -->
   <script>
     document.getElementById('mobile-menu-button').addEventListener('click', function() {
       const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuContent = document.getElementById('mobile-menu-content');
-        const menuButton = document.getElementById('mobile-menu-button');
-        const spans = menuButton.getElementsByTagName('span');
-        
-        if (mobileMenuContent.style.transform === 'translateY(0%)') {
-          // Close menu
-            mobileMenuContent.style.transform = 'translateY(-100%)';
-            mobileMenuContent.style.display = 'none';
-            mobileMenu.style.display = 'none';
-          // Reset hamburger
-          spans[0].style.transform = 'rotate(0) translateY(0)';
-          spans[1].style.opacity = '1';
-          spans[2].style.transform = 'rotate(0) translateY(0)';
-        } else {
-          // Open menu
-            mobileMenuContent.style.transform = 'translateY(0%)';
-            mobileMenuContent.style.display = 'block';
-            mobileMenu.style.display = 'block';
-          // Create X
-          spans[0].style.transform = 'rotate(45deg) translateY(8px)';
-          spans[1].style.opacity = '0';
-          spans[2].style.transform = 'rotate(-45deg) translateY(-8px)';
-        }
+      const mobileMenuContent = document.getElementById('mobile-menu-content');
+      const menuButton = document.getElementById('mobile-menu-button');
+      const menuIcon = menuButton.querySelector('.menu-icon');
+      const closeIcon = menuButton.querySelector('.close-icon');
+      
+      if (mobileMenuContent.style.transform === 'translateY(0%)') {
+        // Close menu
+        mobileMenuContent.style.transform = 'translateY(-100%)';
+        mobileMenuContent.style.display = 'none';
+        mobileMenu.style.display = 'none';
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        menuButton.setAttribute('aria-expanded', 'false');
+      } else {
+        // Open menu
+        mobileMenuContent.style.transform = 'translateY(0%)';
+        mobileMenuContent.style.display = 'block';
+        mobileMenu.style.display = 'block';
+        menuIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        menuButton.setAttribute('aria-expanded', 'true');
+      }
     });
   </script>
+
+  <!-- Wagtail Admin Bar -->
   {% wagtailuserbar "bottom-right" %}
 </header>
+
+<!-- Site-wide JavaScript -->
 <script src="{% static 'js/poxed.js' %}"></script>
