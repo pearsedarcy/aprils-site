@@ -23,13 +23,13 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com', '.herokuapp.com']
 
 # Security settings
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Let Cloudflare manage HSTS
+SECURE_HSTS_PRELOAD = False
 
 # WhiteNoise configuration for static files
 MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
@@ -71,7 +71,7 @@ USE_X_FORWARDED_PORT = True
 
 # Security and HTTPS settings
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
 SECURE_SSL_HOST = None  # Don't force a specific host for SSL
 
 # Update ALLOWED_HOSTS with all variations
@@ -133,6 +133,12 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+# Additional Cloudflare Headers
+MIDDLEWARE.insert(1, 'django.middleware.security.SecurityMiddleware')
+
+# Remove any duplicate MIDDLEWARE entries
+MIDDLEWARE = list(dict.fromkeys(MIDDLEWARE))
 
 try:
     from .local import *
