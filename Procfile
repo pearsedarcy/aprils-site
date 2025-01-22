@@ -1,1 +1,1 @@
-web: gunicorn poxed.wsgi:application
+web: gunicorn poxed.wsgi:application --env DJANGO_SETTINGS_MODULE=poxed.settings.production

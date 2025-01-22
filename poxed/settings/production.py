@@ -31,17 +31,25 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# WhiteNoise configuration for static files
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default=env('DATABASE_URL'), 
-        conn_max_age=600
+        default=env('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
 # Static and Media files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+MEDIA_URL = '/media/'
 
 # Logging
 LOGGING = {
