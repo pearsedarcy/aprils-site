@@ -1,9 +1,10 @@
 <!-- Load required template tags -->
 {% load static wagtailcore_tags wagtailimages_tags navigation_tags wagtailuserbar %}
 
-<!-- Get site root and header configuration -->
+<!-- Get site root, header configuration and logo -->
 {% get_site_root as site_root %}
 {% get_header_config as header_config %}
+{% get_site_logo as logo %}
 
 <!-- Main Header Component
    - Contains logo, navigation menu, action buttons, and mobile menu
@@ -17,12 +18,7 @@
   <a href="#main" class="skip-link" style="position: absolute; top: -30px;">Skip to content</a>
   <div class="mx-auto flex size-full max-w-full items-center justify-between">
     <a href="{% pageurl site_root %}">
-      {% if header_config.logo %}
-        {% image header_config.logo width-40 height-40 alt="Site Logo" %}
-      {% else %}
-        <img src="{% static 'images/april-logo-rough-nobg-nograd-2.max-165x165.png' %}"
-             alt="Default Logo" height="40" width="40" />
-      {% endif %}
+      {% include "includes/logo.html" with logo=logo %}
     </a>
     <!-- Desktop Navigation Menu
         - Hidden on mobile, visible on large screens (lg)

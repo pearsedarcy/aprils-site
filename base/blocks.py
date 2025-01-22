@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from wagtail.blocks import (
     CharBlock,
     ChoiceBlock,
@@ -5,6 +6,7 @@ from wagtail.blocks import (
     StreamBlock,
     StructBlock,
     URLBlock,
+    PageChooserBlock,
 )
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageBlock
@@ -75,3 +77,46 @@ class newStreamBlock(StreamBlock):
         help_text="Insert a URL to embed. For example, https://www.youtube.com/watch?v=SGJFWirQ3ks",
         icon="media",
     )
+
+class FooterLinkBlock(StructBlock):
+    title = CharBlock(required=True)
+    link_type = ChoiceBlock(
+        choices=[
+            ('page', 'Internal Page'),
+            ('external', 'External URL'),
+        ],
+        default='page',
+        required=True,
+    )
+    page = PageChooserBlock(required=False)
+    external_url = URLBlock(required=False)
+    icon = CharBlock(required=False, help_text="Optional: add an SVG icon code")
+
+    def clean(self, value):
+        cleaned_data = super().clean(value)
+        if cleaned_data['link_type'] == 'page' and not cleaned_data.get('page'):
+            raise ValidationError('Please select a page for internal links.')
+        if cleaned_data['link_type'] == 'external' and not cleaned_data.get('external_url'):
+            raise ValidationError('Please enter a URL for external links.')
+        return cleaned_data
+
+    class Meta:
+        template = 'base/blocks/footer_link_block.html'
+        icon = 'link'
+
+class FooterColumnBlock(StructBlock):
+    heading = CharBlock(required=True)
+    links = StreamBlock([
+        ('link', FooterLinkBlock()),
+    ])
+
+    class Meta:
+        template = 'base/blocks/footer_column_block.html'
+        icon = 'list-ul'
+
+class FooterContentBlock(StreamBlock):
+    column = FooterColumnBlock()
+    social_links = FooterLinkBlock()
+
+    class Meta:
+        template = 'base/blocks/footer_content_block.html'

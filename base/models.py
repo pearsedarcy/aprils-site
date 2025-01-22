@@ -9,7 +9,7 @@ from wagtail.admin.panels import (
     PublishingPanel,
 )
 
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import (
     DraftStateMixin,
     PreviewableMixin,
@@ -27,6 +27,8 @@ from wagtail.contrib.settings.models import (
 )
 
 from wagtail.snippets.models import register_snippet
+
+from .blocks import FooterContentBlock, FooterLinkBlock
 
 @register_setting
 class NavigationSettings(BaseGenericSetting):
@@ -122,29 +124,39 @@ class FooterConfiguration(
     TranslatableMixin,
     models.Model,
 ):
-    subscribe_title = models.CharField(max_length=100, default="Subscribe to updates")
-    subscribe_description = models.CharField(max_length=255, default="Stay informed about my latest research and insights.")
-    subscribe_button_text = models.CharField(max_length=50, default="Join")
-    privacy_text = models.CharField(max_length=255, default="By subscribing, you agree to our Privacy Policy.")
-    footer_logo = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
+    content = StreamField(
+        FooterContentBlock(),
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-        verbose_name="Footer Logo"
+        use_json_field=True,
+        verbose_name="Footer Content"
+    )
+    privacy_link = models.URLField(blank=True)
+    terms_link = models.URLField(blank=True)
+    social_links = StreamField(
+        [('social_link', FooterLinkBlock())],
+        blank=True,
+        use_json_field=True,
+        verbose_name="Social Links"
     )
 
     panels = [
+        FieldPanel("content"),
         MultiFieldPanel([
-            FieldPanel("subscribe_title"),
-            FieldPanel("subscribe_description"),
-            FieldPanel("subscribe_button_text"),
-            FieldPanel("privacy_text"),
-        ], "Newsletter Section"),
-        FieldPanel("footer_logo"),
+            FieldPanel("privacy_link"),
+            FieldPanel("terms_link"),
+        ], "Legal Links"),
+        FieldPanel("social_links"),
         PublishingPanel(),
     ]
+
+    def get_preview_template(self, request, mode_name):
+        return "base.html"
+
+    def get_preview_context(self, request, mode_name):
+        return {
+            'footer_config': self,
+            'request': request
+        }
 
     def __str__(self):
         return "Footer Configuration"
@@ -152,6 +164,29 @@ class FooterConfiguration(
     class Meta(TranslatableMixin.Meta):
         verbose_name = "Footer Configuration"
         verbose_name_plural = "Footer Configurations"
+
+@register_snippet
+class SiteLogo(models.Model):
+    logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    alt_text = models.CharField(max_length=100, blank=True)
+
+    panels = [
+        FieldPanel('logo'),
+        FieldPanel('alt_text'),
+    ]
+
+    def __str__(self):
+        return "Site Logo"
+
+    class Meta:
+        verbose_name = "Site Logo"
+        verbose_name_plural = "Site Logo"
 
 class FormField(AbstractFormField):
     page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')

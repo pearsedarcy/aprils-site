@@ -29,4 +29,9 @@ def get_header_config():
 
 @register.simple_tag
 def get_footer_config():
-    return FooterConfiguration.objects.filter(live=True).first()
+    return FooterConfiguration.objects.first()
+
+@register.simple_tag
+def get_site_logo():
+    from base.models import SiteLogo  # Updated import path
+    return SiteLogo.objects.first()
