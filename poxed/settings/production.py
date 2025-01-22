@@ -20,16 +20,16 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = env('DEBUG')
 SECRET_KEY = env('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com', '.herokuapp.com']
 
 # Security settings
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
 
 # WhiteNoise configuration for static files
 MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
