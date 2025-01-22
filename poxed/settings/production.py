@@ -2,6 +2,9 @@ from .base import *
 import os
 import dj_database_url
 import environ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Initialize environ
 env = environ.Env(
@@ -110,6 +113,24 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 MEDIA_URL = '/media/'
+
+# Cloudinary configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'CLOUDINARY_URL': env('CLOUDINARY_URL'),
+}
+
+# Storage settings
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Add cloudinary to INSTALLED_APPS
+INSTALLED_APPS += [
+    'cloudinary',
+    'cloudinary_storage',
+]
 
 # Logging
 LOGGING = {
