@@ -111,8 +111,35 @@ DATABASES = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-MEDIA_URL = '/media/'
+# Remove MEDIA_ROOT and update MEDIA_URL
+MEDIA_URL = 'https://res.cloudinary.com/' + env('CLOUDINARY_CLOUD_NAME') + '/image/upload/'
+
+# Update Storage settings
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+WAGTAILIMAGES_STORAGE = DEFAULT_FILE_STORAGE
+
+# Update Wagtail settings
+WAGTAIL_ENABLE_UPDATE_CHECK = False
+WAGTAILADMIN_BASE_URL = 'https://darcy.phd'
+WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
+WAGTAILDOCS_SERVE_METHOD = 'direct'
+
+# Update Cloudinary settings
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'SECURE': True,
+    'MEDIA_TAG': 'media',
+    'INVALID_VIDEO_ERROR_MESSAGE': 'Please upload a valid video file.',
+    'EXCLUDE_DELETE_ORPHANED_MEDIA_PATHS': [],
+    'STATIC_TAG': 'static',
+    'STATIC_IMAGES_EXTENSIONS': ['jpg', 'jpe', 'jpeg', 'jpc', 'jp2', 'j2k', 'wdp', 'jxr',
+                                'hdp', 'png', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'ico'],
+    'MAGIC_FILE_PATH': 'magic',
+    'PREFIX': 'django-cloudinary'
+}
 
 # Cloudinary configuration
 CLOUDINARY_STORAGE = {
@@ -133,7 +160,7 @@ CLOUDINARY_STORAGE = {
 
 # Storage settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Wagtail specific settings for Cloudinary
 WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
