@@ -125,6 +125,40 @@ wheels = [
 ]
 
 [[package]]
+name = "django-debug-toolbar"
+version = "5.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "sqlparse" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/93/f6/022cffde1ec6daf3d1418d03a69ddc4f760151f75664dcc9fd2167b2997f/django_debug_toolbar-5.0.1.tar.gz", hash = "sha256:296f6f18a80710e84fbb8361538ae5ec522a75ebe9ab67db34bcf1026cbeb420", size = 295982 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/f7/3b406dc871d88c938d2bd967e65acf725b46c4e7c9add6a1f1bbaff9bdcf/django_debug_toolbar-5.0.1-py3-none-any.whl", hash = "sha256:7456cc2e951db37dab335686db7803c4a0ecb6736d120705f6668db9548bf49f", size = 260038 },
+]
+
+[[package]]
+name = "django-environ"
+version = "0.12.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/04/65d2521842c42f4716225f20d8443a50804920606aec018188bbee30a6b0/django_environ-0.12.0.tar.gz", hash = "sha256:227dc891453dd5bde769c3449cf4a74b6f2ee8f7ab2361c93a07068f4179041a", size = 56804 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/83/b3/0a3bec4ecbfee960f39b1842c2f91e4754251e0a6ed443db9fe3f666ba8f/django_environ-0.12.0-py2.py3-none-any.whl", hash = "sha256:92fb346a158abda07ffe6eb23135ce92843af06ecf8753f43adf9d2366dcc0ca", size = 19957 },
+]
+
+[[package]]
+name = "django-extensions"
+version = "3.2.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8a/f1/318684c9466968bf9a9c221663128206e460c1a67f595055be4b284cde8a/django-extensions-3.2.3.tar.gz", hash = "sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a", size = 277216 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/7e/ba12b9660642663f5273141018d2bec0a1cae1711f4f6d1093920e157946/django_extensions-3.2.3-py3-none-any.whl", hash = "sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401", size = 229868 },
+]
+
+[[package]]
 name = "django-filter"
 version = "24.3"
 source = { registry = "https://pypi.org/simple" }
@@ -558,6 +592,9 @@ source = { virtual = "." }
 dependencies = [
     { name = "dj-database-url" },
     { name = "django-browser-reload" },
+    { name = "django-debug-toolbar" },
+    { name = "django-environ" },
+    { name = "django-extensions" },
     { name = "django-tailwind" },
     { name = "environ" },
     { name = "gunicorn" },
@@ -576,6 +613,9 @@ dev = [
 requires-dist = [
     { name = "dj-database-url", specifier = ">=2.3.0" },
     { name = "django-browser-reload", specifier = ">=1.17.0" },
+    { name = "django-debug-toolbar", specifier = ">=5.0.1" },
+    { name = "django-environ", specifier = ">=0.12.0" },
+    { name = "django-extensions", specifier = ">=3.2.3" },
     { name = "django-tailwind", specifier = ">=3.8.0" },
     { name = "environ", specifier = ">=1.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },

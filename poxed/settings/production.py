@@ -1,12 +1,28 @@
 from .base import *
 import os
 import dj_database_url
+import environ
 
-DEBUG = False
+# Initialize environ
+env = environ.Env(
+    DEBUG=(bool, False),
+    DJANGO_SECRET_KEY=(str, None),
+    ALLOWED_HOSTS=(list, []),
+    DATABASE_URL=(str, None),
+    EMAIL_HOST=(str, None),
+    EMAIL_PORT=(int, 587),
+    EMAIL_HOST_USER=(str, None),
+    EMAIL_HOST_PASSWORD=(str, None),
+)
+
+# Read .env file from the base directory
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+DEBUG = env('DEBUG')
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 # Security settings
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -18,7 +34,7 @@ SECURE_HSTS_PRELOAD = True
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=env('DATABASE_URL'), 
         conn_max_age=600
     )
 }
@@ -44,11 +60,11 @@ LOGGING = {
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', 587)
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 try:
     from .local import *

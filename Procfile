@@ -1,1 +1,1 @@
-web: gunicorn poxed.wsgi:application --log-file - 
+web: gunicorn poxed.wsgi:application --log-file --env DJANGO_SETTINGS_MODULE=poxed.settings.production
