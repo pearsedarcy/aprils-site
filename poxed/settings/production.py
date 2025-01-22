@@ -23,13 +23,13 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com', '.herokuapp.com']
 
 # Security settings
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # WhiteNoise configuration for static files
 MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
@@ -55,6 +55,13 @@ CLOUDFLARE_IPS = [
     '104.24.0.0/14',
     '172.64.0.0/13',
     '131.0.72.0/22',
+]
+
+# CSRF and Security Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://darcy.phd',
+    'https://www.darcy.phd',
+    'https://april-wag-2899b9245e95.herokuapp.com',
 ]
 
 # Database
