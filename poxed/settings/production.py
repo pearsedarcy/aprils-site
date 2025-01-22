@@ -64,6 +64,37 @@ CSRF_TRUSTED_ORIGINS = [
     'https://april-wag-2899b9245e95.herokuapp.com',
 ]
 
+# Ensure consistent URL scheme
+PREPEND_WWW = False
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+# Security and HTTPS settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SECURE_SSL_HOST = None  # Don't force a specific host for SSL
+
+# Update ALLOWED_HOSTS with all variations
+ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
+    'darcy.phd',
+    'www.darcy.phd',
+    'april-wag-2899b9245e95.herokuapp.com',
+    '.herokuapp.com',
+]
+
+# CSRF settings with proper origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://darcy.phd',
+    'https://www.darcy.phd',
+    'https://april-wag-2899b9245e95.herokuapp.com',
+]
+
+# Session and cookie settings
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_DOMAIN = None  # Allow the cookie to work on all domains
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_DOMAIN = None
+
 # Database
 DATABASES = {
     'default': dj_database_url.config(
