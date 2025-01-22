@@ -120,11 +120,26 @@ CLOUDINARY_STORAGE = {
     'API_KEY': env('CLOUDINARY_API_KEY'),
     'API_SECRET': env('CLOUDINARY_API_SECRET'),
     'CLOUDINARY_URL': env('CLOUDINARY_URL'),
+    'SECURE': True,
+    'STATIC_TRANSFORMATIONS': {
+        'image': {
+            'fetch_format': 'auto',
+            'quality': 'auto',
+            'secure': True,
+        }
+    },
+    'PREFIX': 'wagtail'  # Optional: adds a prefix to your uploads
 }
 
 # Storage settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+
+# Wagtail specific settings for Cloudinary
+WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
+WAGTAIL_USAGE_COUNT_ENABLED = True
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB max file size
+WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Add cloudinary to INSTALLED_APPS
 INSTALLED_APPS += [
