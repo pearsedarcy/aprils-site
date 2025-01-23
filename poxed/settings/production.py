@@ -135,63 +135,6 @@ MIDDLEWARE.insert(1, 'django.middleware.security.SecurityMiddleware')
 # Remove any duplicate MIDDLEWARE entries
 MIDDLEWARE = list(dict.fromkeys(MIDDLEWARE))
 
-# Remove any whitenoise references
-MIDDLEWARE = [m for m in MIDDLEWARE if 'whitenoise' not in m]
-
-# Consolidated storage settings
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Media and Static settings
-MEDIA_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/image/upload/'
-STATIC_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/static/'
-
-# Cloudinary settings
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'SECURE': True,
-    'MEDIA_TAG': 'media',
-    'INVALID_VIDEO_ERROR_MESSAGE': 'Please upload a valid video file.',
-    'STATIC_TAG': 'static',
-    'PREFIX': 'wagtail'
-}
-
-# Add Cloudinary apps at the beginning of INSTALLED_APPS if not already there
-if 'cloudinary_storage' not in INSTALLED_APPS:
-    INSTALLED_APPS.insert(0, 'cloudinary_storage')
-if 'cloudinary' not in INSTALLED_APPS:
-    INSTALLED_APPS.insert(1, 'cloudinary')
-
-# Add Cloudinary apps
-INSTALLED_APPS = ['cloudinary_storage', 'cloudinary'] + INSTALLED_APPS
-
-# Cloudinary storage configuration
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'SECURE': True,
-    'MEDIA_TAG': 'media',
-    'STATIC_TAG': 'static',
-    'PREFIX': 'wagtail'
-}
-
-# Override storage settings for production
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-}
-
-# Update media and static URLs for Cloudinary
-MEDIA_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/image/upload/'
-
-
-# Configure Wagtail to use Cloudinary
-WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 try:
     from .local import *
