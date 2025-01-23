@@ -2,9 +2,6 @@ from .base import *
 import os
 import dj_database_url
 import environ
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 # Initialize environ
 env = environ.Env(
@@ -12,6 +9,10 @@ env = environ.Env(
     DJANGO_SECRET_KEY=(str, None),
     ALLOWED_HOSTS=(list, []),
     DATABASE_URL=(str, None),
+    CLOUDINARY_URL=(str, None),
+    CLOUDINARY_CLOUD_NAME=(str, None),
+    CLOUDINARY_API_KEY=(str, None),
+    CLOUDINARY_API_SECRET=(str, None),
     EMAIL_HOST=(str, None),
     EMAIL_PORT=(int, 587),
     EMAIL_HOST_USER=(str, None),
@@ -33,10 +34,6 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Let Cloudflare manage HSTS
 SECURE_HSTS_PRELOAD = False
-
-# WhiteNoise configuration for static files
-MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Cloudflare configuration
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -107,72 +104,7 @@ DATABASES = {
     )
 }
 
-# Static and Media files
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
-# Remove MEDIA_ROOT and update MEDIA_URL
-MEDIA_URL = 'https://res.cloudinary.com/' + env('CLOUDINARY_CLOUD_NAME') + '/image/upload/'
-
-# Update Storage settings
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
-WAGTAILIMAGES_STORAGE = DEFAULT_FILE_STORAGE
-
-# Update Wagtail settings
-WAGTAIL_ENABLE_UPDATE_CHECK = False
-WAGTAILADMIN_BASE_URL = 'https://darcy.phd'
-WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
-WAGTAILDOCS_SERVE_METHOD = 'direct'
-
-# Update Cloudinary settings
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'SECURE': True,
-    'MEDIA_TAG': 'media',
-    'INVALID_VIDEO_ERROR_MESSAGE': 'Please upload a valid video file.',
-    'EXCLUDE_DELETE_ORPHANED_MEDIA_PATHS': [],
-    'STATIC_TAG': 'static',
-    'STATIC_IMAGES_EXTENSIONS': ['jpg', 'jpe', 'jpeg', 'jpc', 'jp2', 'j2k', 'wdp', 'jxr',
-                                'hdp', 'png', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'ico'],
-    'MAGIC_FILE_PATH': 'magic',
-    'PREFIX': 'django-cloudinary'
-}
-
-# Cloudinary configuration
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'CLOUDINARY_URL': env('CLOUDINARY_URL'),
-    'SECURE': True,
-    'STATIC_TRANSFORMATIONS': {
-        'image': {
-            'fetch_format': 'auto',
-            'quality': 'auto',
-            'secure': True,
-        }
-    },
-    'PREFIX': 'wagtail'  # Optional: adds a prefix to your uploads
-}
-
-# Storage settings
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Wagtail specific settings for Cloudinary
-WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
-WAGTAIL_USAGE_COUNT_ENABLED = True
-WAGTAILIMAGES_MAX_UPLOAD_SIZE = 20 * 1024 * 1024  # 20MB max file size
-WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Add cloudinary to INSTALLED_APPS
-INSTALLED_APPS += [
-    'cloudinary',
-    'cloudinary_storage',
-]
 
 # Logging
 LOGGING = {
@@ -202,6 +134,64 @@ MIDDLEWARE.insert(1, 'django.middleware.security.SecurityMiddleware')
 
 # Remove any duplicate MIDDLEWARE entries
 MIDDLEWARE = list(dict.fromkeys(MIDDLEWARE))
+
+# Remove any whitenoise references
+MIDDLEWARE = [m for m in MIDDLEWARE if 'whitenoise' not in m]
+
+# Consolidated storage settings
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Media and Static settings
+MEDIA_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/image/upload/'
+STATIC_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/static/'
+
+# Cloudinary settings
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'SECURE': True,
+    'MEDIA_TAG': 'media',
+    'INVALID_VIDEO_ERROR_MESSAGE': 'Please upload a valid video file.',
+    'STATIC_TAG': 'static',
+    'PREFIX': 'wagtail'
+}
+
+# Add Cloudinary apps at the beginning of INSTALLED_APPS if not already there
+if 'cloudinary_storage' not in INSTALLED_APPS:
+    INSTALLED_APPS.insert(0, 'cloudinary_storage')
+if 'cloudinary' not in INSTALLED_APPS:
+    INSTALLED_APPS.insert(1, 'cloudinary')
+
+# Add Cloudinary apps
+INSTALLED_APPS = ['cloudinary_storage', 'cloudinary'] + INSTALLED_APPS
+
+# Cloudinary storage configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'SECURE': True,
+    'MEDIA_TAG': 'media',
+    'STATIC_TAG': 'static',
+    'PREFIX': 'wagtail'
+}
+
+# Override storage settings for production
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+}
+
+# Update media and static URLs for Cloudinary
+MEDIA_URL = f'https://res.cloudinary.com/{env("CLOUDINARY_CLOUD_NAME")}/image/upload/'
+
+
+# Configure Wagtail to use Cloudinary
+WAGTAILIMAGES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 try:
     from .local import *

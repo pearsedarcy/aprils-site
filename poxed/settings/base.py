@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
-from pathlib import Path
+import environ
 
 
 # Remove DEBUG from base settings as it should be environment-specific
@@ -21,6 +20,26 @@ DEBUG = None
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+from pathlib import Path
+# Initialize environ
+env = environ.Env(
+    DEBUG=(bool, False),
+    DJANGO_SECRET_KEY=(str, None),
+    ALLOWED_HOSTS=(list, []),
+    DATABASE_URL=(str, None),
+    CLOUDINARY_URL=(str, None),
+    CLOUDINARY_CLOUD_NAME=(str, None),
+    CLOUDINARY_API_KEY=(str, None),
+    CLOUDINARY_API_SECRET=(str, None),
+    EMAIL_HOST=(str, None),
+    EMAIL_PORT=(int, 587),
+    EMAIL_HOST_USER=(str, None),
+    EMAIL_HOST_PASSWORD=(str, None),
+)
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -58,6 +77,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+# Remove cloudinary_storage and cloudinary from INSTALLED_APPS
+INSTALLED_APPS = [app for app in INSTALLED_APPS if app not in ['cloudinary_storage', 'cloudinary']]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -145,8 +167,9 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
@@ -154,25 +177,17 @@ STATICFILES_DIRS = [
     
 ]
 
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "/static/"
-
+# Basic media configuration
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-# Default storage settings, with the staticfiles storage updated.
-# See https://docs.djangoproject.com/en/5.1/ref/settings/#std-setting-STORAGES
+# Basic storage configuration
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-    # ManifestStaticFilesStorage is recommended in production, to prevent
-    # outdated JavaScript / CSS assets being served from cache
-    # (e.g. after a Wagtail upgrade).
-    # See https://docs.djangoproject.com/en/5.1/ref/contrib/staticfiles/#manifeststaticfilesstorage
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
