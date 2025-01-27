@@ -10,12 +10,16 @@
         <div class="md:text-md">{{ value.text|richtext }}</div>
         <div class="mt-6 flex flex-wrap gap-4 md:mt-8">
           {% if value.primary_button_text %}
-            <a href="{{ value.primary_button_url }}" class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3">
+          <a href="{% if value.primary_button_page %}{% pageurl value.primary_button_page %}{% else %}{{ value.primary_button_url }}{% endif %}"
+          {% if value.primary_button_url %}target="_blank"{% endif %}
+          class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3">
               {{ value.primary_button_text }}
             </a>
           {% endif %}
           {% if value.secondary_button_text %}
-            <a href="{{ value.secondary_button_url }}" class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3">
+          <a href="{% if value.secondary_button_page %}{% pageurl value.secondary_button_page %}{% else %}{{ value.secondary_button_url }}{% endif %}"
+          {% if value.secondary_button_url %}target="_blank"{% endif %}
+          class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3">
               {{ value.secondary_button_text }}
             </a>
           {% endif %}

@@ -45,11 +45,14 @@ class CardBlock(StructBlock):
         help_text="Choose which side the image appears on"
     )
     
-    # Button fields
+    # Updated button fields
     primary_button_text = CharBlock(required=False, help_text="Text for the primary green button")
-    primary_button_url = URLBlock(required=False, help_text="Link for the primary button")
+    primary_button_page = PageChooserBlock(required=False, help_text="Internal page link for the primary button")
+    primary_button_url = URLBlock(required=False, help_text="External URL for the primary button")
+
     secondary_button_text = CharBlock(required=False, help_text="Text for the secondary pink button")
-    secondary_button_url = URLBlock(required=False, help_text="Link for the secondary button")
+    secondary_button_page = PageChooserBlock(required=False, help_text="Internal page link for the secondary button")
+    secondary_button_url = URLBlock(required=False, help_text="External URL for the secondary button")
 
     class Meta:
         icon = "form"
