@@ -51,13 +51,17 @@
         {% if self.primary_button_text or self.secondary_button_text %}
           <div class="flex gap-2 md:gap-4 mt-6 {% if self.image_position == 'left' %}justify-end{% else %}justify-start{% endif %}">
             {% if self.primary_button_text %}
-              <a href="{{ self.primary_button_url }}" target="_blank" class="whitespace-nowrap inline-block px-4 py-2 md:px-5 md:py-2.5 bg-green-600 text-white text-sm lg:text-base font-semibold hover:bg-green-700 transition-colors">
-          {{ self.primary_button_text }}
+              <a href="{% if self.primary_button_page %}{% pageurl self.primary_button_page %}{% else %}{{ self.primary_button_url }}{% endif %}"
+                 {% if self.primary_button_url %}target="_blank"{% endif %}
+                 class="whitespace-nowrap inline-block px-4 py-2 md:px-5 md:py-2.5 bg-green-600 text-white text-sm lg:text-base font-semibold hover:bg-green-700 transition-colors">
+                {{ self.primary_button_text }}
               </a>
             {% endif %}
             {% if self.secondary_button_text %}
-              <a href="{{ self.secondary_button_url }}" target="_blank" class="whitespace-nowrap inline-block px-4 py-2 md:px-5 md:py-2.5 border-2 border-pink-600 text-pink-600 text-sm lg:text-base font-semibold hover:bg-pink-600 hover:text-white transition-colors">
-          {{ self.secondary_button_text }}
+              <a href="{% if self.secondary_button_page %}{% pageurl self.secondary_button_page %}{% else %}{{ self.secondary_button_url }}{% endif %}"
+                 {% if self.secondary_button_url %}target="_blank"{% endif %}
+                 class="whitespace-nowrap inline-block px-4 py-2 md:px-5 md:py-2.5 border-2 border-pink-600 text-pink-600 text-sm lg:text-base font-semibold hover:bg-pink-600 hover:text-white transition-colors">
+                {{ self.secondary_button_text }}
               </a>
             {% endif %}
           </div>
