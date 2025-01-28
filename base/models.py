@@ -7,6 +7,7 @@ from wagtail.admin.panels import (
     InlinePanel,
     MultiFieldPanel,
     PublishingPanel,
+    PageChooserPanel,  # Add this import
 )
 
 from wagtail.fields import RichTextField, StreamField
@@ -92,19 +93,33 @@ class HeaderConfiguration(
         verbose_name="Logo"
     )
     cv_button_text = models.CharField(max_length=50, default="CV")
-    cv_button_link = models.URLField(blank=True)
+    cv_button_page = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="CV Page"
+    )
     contact_button_text = models.CharField(max_length=50, default="Contact")
-    contact_button_link = models.URLField(blank=True)
+    contact_button_page = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="Contact Page"
+    )
 
     panels = [
         FieldPanel("logo"),
         MultiFieldPanel([
             FieldPanel("cv_button_text"),
-            FieldPanel("cv_button_link"),
+            PageChooserPanel("cv_button_page"),
         ], "CV Button"),
         MultiFieldPanel([
             FieldPanel("contact_button_text"),
-            FieldPanel("contact_button_link"),
+            PageChooserPanel("contact_button_page"),
         ], "Contact Button"),
         PublishingPanel(),
     ]
