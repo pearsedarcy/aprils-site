@@ -14,14 +14,26 @@
     </div>
   {% endif %}
   
-  <div class="relative w-full">
-    <div class="flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+  <div class="relative w-full px-12"> <!-- Added px-12 for button spacing -->
+    <button onclick="scrollFeatures('left')" class="absolute left-0 top-[calc(50%-24px)] z-10 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div id="featuresContainer" class="flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
       {% for feature in value.features %}
         <div class="snap-start flex-none w-[300px] md:w-[400px]">
           {% include "home/blocks/feature_block.html" with value=feature %}
         </div>
       {% endfor %}
     </div>
+
+    <button onclick="scrollFeatures('right')" class="absolute right-0 top-[calc(50%-24px)] z-10 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
   </div>
 </section>
 
@@ -34,3 +46,22 @@
     scrollbar-width: none;
   }
 </style>
+
+<script>
+  function scrollFeatures(direction) {
+    const container = document.getElementById('featuresContainer');
+    const scrollAmount = container.offsetWidth;
+    
+    if (direction === 'left') {
+      container.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    } else {
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  }
+</script>
