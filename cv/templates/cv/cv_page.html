@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="cv-container max-w-4xl mx-auto px-4 py-8">
+    <div class="mb-12 text-center">
+        <h1 class="text-4xl font-bold mb-6">{{ page.title }}</h1>
+        {% if page.introduction %}
+            <div class="prose max-w-2xl mx-auto">
+                {{ page.introduction|richtext }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="cv-content">
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -49,6 +49,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Application definition
 
 INSTALLED_APPS = [
+    "cv",
     "timeline",
     "portfolio",
     "base",
@@ -66,10 +67,10 @@ INSTALLED_APPS = [
     "wagtail.sites",
     "wagtail.users",
     "wagtail.snippets",
-    "wagtail.documents",
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.documents",
     "wagtail",
     "modelcluster",
     "taggit",
@@ -185,9 +186,14 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': env('CLOUDINARY_API_KEY'),
     'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'RESOURCE_TYPE': 'raw'
 }
 
+
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+WAGTAILDOCS_SERVE_METHOD = 'direct'
+WAGTAILDOCS_DOCUMENT_MODEL = 'wagtaildocs.Document'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
@@ -205,6 +211,9 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+    "wagtaildocs": {
+        "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
+    }
 }
 
 # Wagtail settings
@@ -228,6 +237,13 @@ WAGTAILADMIN_BASE_URL = "https://darcy.phd"
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+
+WAGTAILDOCS_CONTENT_TYPES = {
+    'pdf': 'application/pdf',
+    'txt': 'text/plain',
+}
+
+WAGTAILDOCS_INLINE_CONTENT_TYPES = ['application/pdf', 'text/plain']
 
 # Add these settings at the bottom
 TAILWIND_APP_NAME = 'theme'
