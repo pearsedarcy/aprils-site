@@ -17,7 +17,7 @@
   <!-- Accessibility skip link -->
   <a href="#main" class="skip-link" style="position: absolute; top: -30px;">Skip to content</a>
   <div class="mx-auto flex size-full max-w-full items-center justify-between">
-    <a href="{% pageurl site_root %}">
+    <a href="{% pageurl site_root %}" aria-label="Go to homepage">
       {% include "includes/logo.html" with logo=logo %}
     </a>
     <!-- Desktop Navigation Menu
@@ -37,7 +37,7 @@
       <div class="flex items-center gap-4">
         {% if header_config.cv_button_page %}
           <a href="{% pageurl header_config.cv_button_page %}"
-             class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 text-white hover:bg-green-700 hover:scale-105 active:scale-95 px-5 py-2 shadow-sm hover:shadow-md"
+             class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 text-black hover:bg-green-700 hover:scale-105 active:scale-95 px-5 py-2 shadow-sm hover:shadow-md"
           >{{ header_config.cv_button_text }}</a>
         {% endif %}
         {% if header_config.contact_button_page %}

@@ -13,6 +13,28 @@
         {% endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}" />
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ request.get_full_path|slice:'1:' }}" />
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
+        <meta property="og:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ request.get_full_path|slice:'1:' }}" />
+        {% if page.og_image %}
+        <meta property="og:image" content="{{ page.og_image.url }}" />
+        {% endif %}
+        
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
+        <meta name="twitter:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}">
+        {% if page.og_image %}
+        <meta name="twitter:image" content="{{ page.og_image.url }}">
+        {% endif %}
+
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}
         <base target="_blank">
