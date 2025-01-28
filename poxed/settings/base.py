@@ -186,7 +186,7 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': env('CLOUDINARY_API_KEY'),
     'API_SECRET': env('CLOUDINARY_API_SECRET'),
-    'RESOURCE_TYPE': 'raw'
+    'RESOURCE_TYPE': 'auto',
 }
 
 
@@ -202,7 +202,7 @@ MEDIA_URL = "/media/"
 # See https://docs.djangoproject.com/en/5.1/ref/settings/#std-setting-STORAGES
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
     },
     # ManifestStaticFilesStorage is recommended in production, to prevent
     # outdated JavaScript / CSS assets being served from cache
