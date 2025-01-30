@@ -24,7 +24,6 @@
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    border-radius: 10px; 
 }
 
 ::-webkit-scrollbar-track {
@@ -33,7 +32,7 @@
 
 ::-webkit-scrollbar-thumb {
     background: #c34271;
-    border-radius: 10px; /* Changed from 4px to 999px for fully rounded ends */
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
