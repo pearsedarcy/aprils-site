@@ -85,17 +85,17 @@
       - Slides in from top when activated -->
   <div
     id="mobile-menu"
-    class="absolute left-0 right-0 top-full w-full overflow-hidden hidden "
-    style="height: 100vh"
+    class="absolute left-0 right-0 top-full w-full overflow-hidden transition-[height,opacity] duration-300"
+    style="height: 0; opacity: 0;"
   >
     <div
       id="mobile-menu-content"
-      class="absolute left-0 right-0 top-0 block h-dvh overflow-auto border-b border-border-primary bg-background-primary px-[5%] pb-8 pt-4"
-      style="transform: translateY(-100%); display: none;"
+      class="absolute left-0 right-0 top-0 block h-dvh overflow-auto border-b border-border-primary bg-background-primary px-[5%] pb-8 pt-4 transition-transform duration-300 ease-out"
+      style="transform: translateY(-100%);"
     > 
       <div class="flex flex-col">
         {% for menuitem in site_root.get_children.live.in_menu %}
-        <a href="{% pageurl menuitem %}" class="block py-3 text-md">{{ menuitem.title }}</a>
+        <a href="{% pageurl menuitem %}" class="block py-3 text-md text-right">{{ menuitem.title }}</a>
         {% endfor %}
         <div class="mt-6 flex flex-col gap-4">
           {% if header_config.cv_button_page %}
@@ -136,16 +136,24 @@
       if (mobileMenuContent.style.transform === 'translateY(0%)') {
         // Close menu
         mobileMenuContent.style.transform = 'translateY(-100%)';
-        mobileMenuContent.style.display = 'none';
-        mobileMenu.style.display = 'none';
+        mobileMenu.style.height = '0';
+        mobileMenu.style.opacity = '0';
+        setTimeout(() => {
+          if (mobileMenu.style.height === '0px') {
+            mobileMenu.style.display = 'none';
+          }
+        }, 300);
         menuIcon.classList.remove('hidden');
         closeIcon.classList.add('hidden');
         menuButton.setAttribute('aria-expanded', 'false');
       } else {
         // Open menu
-        mobileMenuContent.style.transform = 'translateY(0%)';
-        mobileMenuContent.style.display = 'block';
         mobileMenu.style.display = 'block';
+        requestAnimationFrame(() => {
+          mobileMenu.style.height = '100vh';
+          mobileMenu.style.opacity = '1';
+          mobileMenuContent.style.transform = 'translateY(0%)';
+        });
         menuIcon.classList.add('hidden');
         closeIcon.classList.remove('hidden');
         menuButton.setAttribute('aria-expanded', 'true');

@@ -14,9 +14,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <!-- SEO Meta Tags -->
-        <meta name="description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}" />
+        <meta name="description" content="{% if page.search_description %}{{
+        page.search_description }}{% else %}{{ current_site.site_name }}D - April
+        'Arcy PhD.{% endif %}" />
         <meta name="robots" content="index, follow">
-        <link rel="canonical" href="{{ request.get_full_path|slice:'1:' }}" />
+      
 
         <!-- Open Graph Meta Tags -->
         <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
@@ -50,14 +52,23 @@
 
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/poxed.css' %}">
-
-        {% block extra_css %}{% endblock %}
+        <link rel="stylesheet" href="{% static 'css/transitions.css' %}">
+        {% block extra_css %}
+    {% endblock %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+        <script src="{% static 'js/page-transitions.js' %}"></script>
         {% include "includes/header.html" %}
         <main id="main">
-        {% block content %}{% endblock %}
+            <div class="main-transition">
+                <div id="page-logo-tranny">
+                {% include "includes/logo.html" with logo=logo %}
+                </div>
+            </div>
+            <div class="main-content">
+                {% block content %}{% endblock %}
+            </div>
         </main>
         <!-- Footer partial -->
         {% include "includes/footer.html" %}
