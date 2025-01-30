@@ -5,15 +5,20 @@
 <style>
     .timeline-card {
         opacity: 0;
-        transform: translateX(-50px);
+        transform: translateY(50px);
         transition: all 0.6s ease-out;
     }
-    .timeline-card.is-right {
-        transform: translateX(50px);
+    @media (min-width: 640px) {
+        .timeline-card {
+            transform: translateX(-50px);
+        }
+        .timeline-card.is-right {
+            transform: translateX(50px);
+        }
     }
     .timeline-card.is-visible {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) translateY(0);
     }
 </style>
 {% endblock %}
