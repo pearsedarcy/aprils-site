@@ -6,7 +6,7 @@
 
     <!-- Content card -->
     <div class="timeline-card w-full pb-10 sm:px-4 sm:w-1/2 {% if forloop.counter|divisibleby:2 %}sm:ml-auto sm:pl-4 sm:pr-2 is-right{% else %}sm:mr-auto sm:pr-4 sm:pl-2{% endif %}">
-        <div class="bg-white/20 rounded-lg shadow-lg
+        <div class="bg-white/80 rounded-lg shadow-lg
                     transition duration-300 ease-in-out 
                     hover:shadow-xl hover:-translate-y-1 
                     hover:bg-gray-50 sm:p-4">
@@ -19,7 +19,7 @@
             </div>
             {% endif %}
             
-            <div class="prose max-w-none"></div>
+            <div class="prose max-w-none "></div>
                 {{ value.description|richtext }}
             </div>
         </div>
