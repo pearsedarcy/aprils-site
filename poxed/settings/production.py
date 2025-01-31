@@ -108,12 +108,17 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Email Configuration for ZOHO
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # your zoho email
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # your zoho password or app-specific password
+EMAIL_HOST = 'smtp.zoho.eu'
+EMAIL_PORT = 465  # Changed from 587 to 465 for SSL
+EMAIL_USE_TLS = False  # Changed from True to False
+EMAIL_USE_SSL = True  # Added SSL support
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
+SERVER_EMAIL = env('EMAIL_HOST_USER')
+
+# Add email timeout setting
+EMAIL_TIMEOUT = 30  # seconds
 
 # Logging
 LOGGING = {
