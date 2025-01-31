@@ -256,6 +256,16 @@ TAILWIND_APP_NAME = 'theme'
 TAILWIND_CSS_PATH = 'css/dist/styles.css'
 TAILWIND_JS_PATH = 'js/dist/scripts.js'
 
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# The following settings will be overridden in production.py
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
+
 # Development-only settings should be moved to dev.py
 if DEBUG:
     NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"

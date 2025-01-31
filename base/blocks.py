@@ -120,3 +120,14 @@ class FooterContentBlock(StreamBlock):
 
     class Meta:
         template = 'base/blocks/footer_content_block.html'
+
+class ContactInfoBlock(StructBlock):
+    icon_svg = CharBlock(required=True, help_text="SVG path data for the icon")
+    title = CharBlock(required=True)
+    description = CharBlock(required=True)
+    link_text = CharBlock(required=True)
+    link_url = URLBlock(required=True)
+
+    class Meta:
+        template = 'base/blocks/contact_info_block.html'
+        icon = 'info'

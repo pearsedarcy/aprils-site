@@ -5,17 +5,17 @@
 
 {% block content %}
     <div class="container mx-auto px-4 py-16 max-w-2xl">
-        <div class=" shadow-lg rounded-lg p-8 text-center">
+        <div class="bg-background-primary shadow-lg rounded-lg p-8 text-center border border-brand-primary">
             <div class="mb-6">
-                <svg class="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-16 h-16 text-system-success-green mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Thank You!</h2>
-            <div class="prose prose-lg mx-auto text-gray-600">
+            <h2 class="text-3xl font-bold text-text-primary mb-4">Thank You!</h2>
+            <div class="prose prose-lg mx-auto text-text-default">
                 {{ page.thank_you_text|richtext }}
             </div>
-            <a href="/" class="inline-block mt-8 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <a href="/" class="inline-block mt-8 px-6 py-3 bg-background-alternative text-text-alternative rounded-md hover:bg-brand-accent3 transition-colors">
                 Return to Homepage
             </a>
         </div>

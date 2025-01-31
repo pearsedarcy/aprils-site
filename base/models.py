@@ -29,7 +29,7 @@ from wagtail.contrib.settings.models import (
 
 from wagtail.snippets.models import register_snippet
 
-from .blocks import FooterContentBlock, FooterLinkBlock
+from .blocks import ContactInfoBlock, FooterContentBlock, FooterLinkBlock
 
 @register_setting
 class NavigationSettings(BaseGenericSetting):
@@ -218,6 +218,9 @@ class FormPage(AbstractEmailForm):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    contact_info = StreamField([
+        ('contact_item', ContactInfoBlock()),
+    ], use_json_field=True, blank=True)
 
     content_panels = AbstractEmailForm.content_panels + [
         FormSubmissionsPanel(),
@@ -226,6 +229,7 @@ class FormPage(AbstractEmailForm):
         FieldPanel('image'),
         InlinePanel('form_fields', label="Form fields"),
         FieldPanel('thank_you_text'),
+        FieldPanel('contact_info'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('from_address'),
