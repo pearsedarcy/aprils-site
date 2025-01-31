@@ -1,15 +1,18 @@
-<div class="flex flex-col items-center justify-start text-center">
-    <div class="mb-5 lg:mb-6">
-        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" 
-             class="size-12" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-            <path d="{{ value.icon_svg }}"></path>
-        </svg>
+<a href="{% if value.contact_type == 'email' %}mailto:{{ value.email }}{% else %}{{ value.social_link }}{% endif %}" 
+   target="_blank"
+   class="block border-2 border-accent-500 rounded-lg p-6 hover:bg-pink-50 transition-colors">
+    <div class="flex flex-col items-center justify-center text-center">
+        <div class="mb-5 lg:mb-6 flex justify-center items-center w-full">
+            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" 
+                 class="size-12" height="3em" width="3em" xmlns="http://www.w3.org/2000/svg">
+                <path d="{{ value.icon_svg }}"></path>
+            </svg>
+        </div>
+        <h3 class="mb-3 text-2xl font-bold leading-[1.4] md:text-3xl lg:mb-4 lg:text-4xl">
+            {{ value.title }}
+        </h3>
+        <p class="mb-5 md:mb-6">
+            {{ value.description }}
+        </p>
     </div>
-    <h3 class="mb-3 text-2xl font-bold leading-[1.4] md:text-3xl lg:mb-4 lg:text-4xl">
-        {{ value.title }}
-    </h3>
-    <p class="mb-5 md:mb-6">
-        {{ value.description }}
-    </p>
-    <a class="underline" href="{{ value.link_url }}">{{ value.link_text }}</a>
-</div>
+</a>

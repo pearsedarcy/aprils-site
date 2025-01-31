@@ -7,6 +7,7 @@ from wagtail.blocks import (
     StructBlock,
     URLBlock,
     PageChooserBlock,
+    EmailBlock,
 )
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageBlock
@@ -125,8 +126,29 @@ class ContactInfoBlock(StructBlock):
     icon_svg = CharBlock(required=True, help_text="SVG path data for the icon")
     title = CharBlock(required=True)
     description = CharBlock(required=True)
-    link_text = CharBlock(required=True)
-    link_url = URLBlock(required=True)
+    contact_type = ChoiceBlock(
+        choices=[
+            ('social', 'Social Media Link'),
+            ('email', 'Email Link'),
+        ],
+        required=True,
+    )
+    # Contact-specific fields
+    social_link = URLBlock(required=False)
+    email = EmailBlock(required=False)
+
+    
+    def clean(self, value):
+        cleaned_data = super().clean(value)
+        contact_type = cleaned_data.get('contact_type')
+        
+        if contact_type == 'social' and not cleaned_data.get('social_link'):
+            raise ValidationError('Please enter a social media URL.')
+        elif contact_type == 'email' and not cleaned_data.get('email'):
+            raise ValidationError('Please enter an email address.')
+
+            
+        return cleaned_data
 
     class Meta:
         template = 'base/blocks/contact_info_block.html'

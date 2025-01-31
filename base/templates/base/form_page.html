@@ -38,9 +38,10 @@
         </div>
       </section>
       {% if page.contact_info %}
-      <section id="contact-info" class="py-16 md:py-10 lg:py-16">
-        <div class="container">
-            <div class="grid auto-cols-fr grid-cols-1 items-center gap-x-12 gap-y-12 md:grid-cols-3 md:gap-y-16">
+      <section id="contact-info" class="py-16 md:py-10 lg:py-16 px-[5%]" >
+        <div class="container ">
+            <div class="grid auto-cols-fr grid-cols-1 items-center gap-x-12
+            gap-y-12 md:grid-cols-2 md:gap-y-16c mx-1">
                 {% for block in page.contact_info %}
                     {{ block }}
                 {% endfor %}
