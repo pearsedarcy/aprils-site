@@ -5,45 +5,74 @@
 {% block body_class %}template-blogpage{% endblock %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <p class="meta">{{ page.date }}</p>
+    <article class="container mx-auto px-4 py-8 max-w-4xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-brand-primary mb-4">{{ page.title }}</h1>
+        
+        <div class="flex items-center gap-4 text-neutral mb-8">
+            <time class="text-sm">{{ page.date }}</time>
+            
+            {% with authors=page.authors.all %}
+            {% if authors %}
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">By:</span>
+                    <div class="flex gap-2">
+                        {% for author in authors %}
+                            <div class="flex items-center gap-2">
+                                {% image author.author_image fill-40x40 class="rounded-full" %}
+                                <span class="text-sm font-medium">{{ author.name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
 
-    <!-- Add this: -->
-    {% with authors=page.authors.all %}
-    {% if authors %}
-        <h3>Posted by:</h3>
-        <ul>
-            {% for author in authors %}
-                <li style="display: inline">
-                    {% image author.author_image fill-40x60 style="vertical-align: middle" %}
-                    {{ author.name }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
-    <div class="intro">{{ page.intro }}</div>
+        {% if page.intro %}
+            <div class="text-lg text-neutral-dark mb-8 font-medium">
+                {{ page.intro }}
+            </div>
+        {% endif %}
 
-    {{ page.body|richtext }}
-  
-    <!-- Add this: -->
-    {% for item in page.gallery_images.all %}
-    <div style="float: inline-start; margin: 10px">
-        {% image item.image fill-320x240 %}
-        <p>{{ item.caption }}</p>
-    </div>
-   {% endfor %}
+        <div class="prose lg:prose-lg max-w-none mb-12">
+            {{ page.body|richtext }}
+        </div>
 
-    <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
-    {% with tags=page.tags.all %}
-        {% if tags %}
-            <div class="tags">
-                <h3>Tags</h3>
-                {% for tag in tags %}
-                    <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
+        {% if page.gallery_images.all %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {% for item in page.gallery_images.all %}
+                    <figure class="relative">
+                        {% image item.image fill-400x300 class="rounded-lg w-full h-full object-cover" %}
+                        {% if item.caption %}
+                            <figcaption class="mt-2 text-sm text-neutral">{{ item.caption }}</figcaption>
+                        {% endif %}
+                    </figure>
                 {% endfor %}
             </div>
         {% endif %}
-    {% endwith %}
 
+        <footer class="mt-12 pt-6 border-t border-neutral-lightest">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="{{ page.get_parent.url }}" class="inline-flex items-center text-brand-primary hover:text-brand-secondary transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to blog
+                </a>
+
+                {% with tags=page.tags.all %}
+                    {% if tags %}
+                        <div class="flex flex-wrap gap-2">
+                            {% for tag in tags %}
+                                <a href="{% slugurl 'tags' %}?tag={{ tag }}" 
+                                   class="px-3 py-1 bg-brand-primary/10 text-brand-primary rounded-full text-sm hover:bg-brand-primary hover:text-white transition-colors duration-300">
+                                    {{ tag }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </footer>
+    </article>
 {% endblock %}

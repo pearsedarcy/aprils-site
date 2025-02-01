@@ -1,0 +1,51 @@
+.skip-link {
+    position: absolute;
+    top: -30px;
+  }
+  
+.page-form label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.page-form :is(textarea, input, select) {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.page-form .helptext {
+    font-style: italic;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c34271;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #F070A1;
+}
+
+/* Hide scrollbar buttons */
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #c34271 transparent;
+}

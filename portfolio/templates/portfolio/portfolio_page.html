@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-portfolio{% endblock %}
+
+{% block content %}
+<section id="page-header-1" class="px-[5%] py-6 md:py-4 lg:py-6">
+    <div class="container max-w-lg text-center">
+      <h1 class="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">
+        {{ page.title }}
+      </h1>
+      <h2 class="md:text-md">
+        {{ page.sub_title|richtext }}
+      </h2>
+    </div>
+  </section>
+  {{ page.body }}
+{% endblock %}
+

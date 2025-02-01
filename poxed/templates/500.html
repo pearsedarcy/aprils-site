@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" class="h-full">
     <head>
         <meta charset="utf-8" />
-        <title>Internal server error</title>
+        <title>Internal Server Error</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body>
-        <h1>Internal server error</h1>
-
-        <h2>Sorry, there seems to be an error. Please try again soon.</h2>
+    <body class="h-full">
+        <div class="flex min-h-screen items-center justify-center px-[5%] py-20">
+            <div class="flex max-w-2xl flex-col items-center text-center">
+                <!-- 500 Icon/Illustration -->
+                <div class="mb-8 text-8xl">
+                    🔬
+                </div>
+                
+                <!-- Main Error Message -->
+                <h1 class="mb-4 text-4xl font-bold text-pink-600 md:text-5xl lg:text-6xl">
+                    Lab Malfunction
+                </h1>
+                
+                <!-- Supportive Message -->
+                <p class="mb-8 text-lg text-neutral-600 md:text-xl">
+                    Our lab equipment is experiencing technical difficulties. Our scientists are working hard to fix the issue. Please try again soon.
+                </p>
+                
+                <!-- Action Button -->
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <a href="/" 
+                       class="focus-visible:ring-border-primary inline-flex items-center justify-center whitespace-nowrap ring-offset-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-pink-600 text-white hover:bg-pink-700 hover:scale-105 active:scale-95 px-8 py-3 text-base shadow-sm hover:shadow-md">
+                        Return Home
+                    </a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

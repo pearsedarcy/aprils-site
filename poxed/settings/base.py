@@ -12,9 +12,34 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import environ
+
+
+# Remove DEBUG from base settings as it should be environment-specific
+DEBUG = None
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+from pathlib import Path
+# Initialize environ
+env = environ.Env(
+    DEBUG=(bool, False),
+    DJANGO_SECRET_KEY=(str, None),
+    ALLOWED_HOSTS=(list, []),
+    DATABASE_URL=(str, None),
+    CLOUDINARY_URL=(str, None),
+    CLOUDINARY_CLOUD_NAME=(str, None),
+    CLOUDINARY_API_KEY=(str, None),
+    CLOUDINARY_API_SECRET=(str, None),
+    EMAIL_HOST=(str, None),
+    EMAIL_PORT=(int, 587),
+    EMAIL_HOST_USER=(str, None),
+    EMAIL_HOST_PASSWORD=(str, None),
+)
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,13 +49,17 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "cv",
+    "timeline",
+    "portfolio",
     "base",
     "blog",
     "home",
     "search",
-    "django_browser_reload",
     "tailwind",
     "theme",
+    "cloudinary_storage",
+    "cloudinary",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.settings",
@@ -38,10 +67,10 @@ INSTALLED_APPS = [
     "wagtail.sites",
     "wagtail.users",
     "wagtail.snippets",
-    "wagtail.documents",
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.documents",
     "wagtail",
     "modelcluster",
     "taggit",
@@ -55,6 +84,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -62,7 +92,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-  #
 ]
 
 ROOT_URLCONF = "poxed.urls"
@@ -139,14 +168,32 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
     os.path.join(BASE_DIR, "theme/static/css"),
- 
+    
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
+
+# Make sure Cloudinary settings are properly configured
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'RESOURCE_TYPE': 'auto',
+}
+
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+WAGTAILDOCS_SERVE_METHOD = 'direct'
+WAGTAILDOCS_DOCUMENT_MODEL = 'wagtaildocs.Document'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
@@ -155,17 +202,19 @@ MEDIA_URL = "/media/"
 # See https://docs.djangoproject.com/en/5.1/ref/settings/#std-setting-STORAGES
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     # ManifestStaticFilesStorage is recommended in production, to prevent
     # outdated JavaScript / CSS assets being served from cache
     # (e.g. after a Wagtail upgrade).
     # See https://docs.djangoproject.com/en/5.1/ref/contrib/staticfiles/#manifeststaticfilesstorage
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+    "wagtaildocs": {
+        "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
+    }
 }
-
 
 # Wagtail settings
 
@@ -181,13 +230,20 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILADMIN_BASE_URL = "https://darcy.phd"
 
 # Allowed file extensions for documents in the document library.
 # This can be omitted to allow all files, but note that this may present a security risk
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+
+WAGTAILDOCS_CONTENT_TYPES = {
+    'pdf': 'application/pdf',
+    'txt': 'text/plain',
+}
+
+WAGTAILDOCS_INLINE_CONTENT_TYPES = ['application/pdf', 'text/plain']
 
 # Add these settings at the bottom
 TAILWIND_APP_NAME = 'theme'
@@ -200,4 +256,16 @@ TAILWIND_APP_NAME = 'theme'
 TAILWIND_CSS_PATH = 'css/dist/styles.css'
 TAILWIND_JS_PATH = 'js/dist/scripts.js'
 
-NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# The following settings will be overridden in production.py
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
+
+# Development-only settings should be moved to dev.py
+if DEBUG:
+    NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"

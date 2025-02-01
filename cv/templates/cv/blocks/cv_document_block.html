@@ -1,0 +1,101 @@
+<div class="mb-8">
+    <!-- Add Canvas Confetti script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    {% if value.document %}
+        <div class="mb-4 flex justify-end w-full">
+            <a href="{{ value.document.file.url }}" 
+               class="download-cv-btn inline-flex items-center px-6 py-3 bg-brand-primary text-neutral-white rounded-lg hover:bg-brand-secondary transition-colors shadow-small hover:shadow-medium"
+               onclick="handleDownload(event, this.href)"
+               rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span class="font-medium">Download</span>
+            </a>
+        </div>
+    {% endif %}
+    <div class="w-full bg-neutral-lightest rounded-lg shadow-medium overflow-hidden">
+        {% if value.document %}
+            <object
+                data="{{ value.document.file.url }}"
+                type="application/pdf"
+                class="w-full h-[800px]"
+            >
+                <div class="p-6 text-center">
+                    <p class="text-neutral-dark mb-4">
+                        Your browser doesn't support PDF embedding.
+                    </p>
+                    <a href="{{ value.document.file.url }}" 
+                       class="inline-flex items-center text-brand-primary hover:text-brand-secondary underline font-medium"
+                       download="{{ value.document.filename }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Click here to download the PDF file
+                        <span class="text-neutral ml-1">({{ value.document.title }})</span>
+                    </a>
+                </div>
+            </object>
+        {% else %}
+            <p class="p-6 text-neutral text-center">No CV document uploaded</p>
+        {% endif %}
+    </div>
+    
+    <script>
+        function handleDownload(event, url) {
+            event.preventDefault();
+            triggerConfetti(event);
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 1200);
+        }
+
+        function triggerConfetti(event) {
+            // Create confetti burst
+            confetti({
+                particleCount: 200,
+                spread: 160,
+                origin: { y: 0.8, x: 0.5 },  // Moved down
+                colors: ['#c34271', '#F070A1', '#16FFBD', '#12C998', '#439F76'],
+                angle: 90,
+                startVelocity: 45,
+                gravity: 0.7,
+                scalar: 1.2,
+                drift: 0,
+                ticks: 300
+            });
+            
+            // Fire another burst after a small delay
+            setTimeout(() => {
+                confetti({
+                    particleCount: 150,
+                    spread: 120,
+                    origin: { y: 0.8, x: 0.3 },  // Moved down
+                    colors: ['#c34271', '#F070A1', '#16FFBD', '#12C998', '#439F76'],
+                    angle: 60,
+                    startVelocity: 40,
+                    gravity: 0.7,
+                    scalar: 1.1,
+                    drift: 0.5,
+                    ticks: 250
+                });
+
+                // Add a third burst for more coverage
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 150,
+                        spread: 120,
+                        origin: { y: 0.8, x: 0.7 },  // Moved down
+                        colors: ['#c34271', '#F070A1', '#16FFBD', '#12C998', '#439F76'],
+                        angle: 120,
+                        startVelocity: 40,
+                        gravity: 0.7,
+                        scalar: 1.1,
+                        drift: -0.5,
+                        ticks: 250
+                    });
+                }, 100);
+            }, 200);
+        }
+    </script>
+</div>

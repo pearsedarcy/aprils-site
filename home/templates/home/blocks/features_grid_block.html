@@ -1,0 +1,92 @@
+{% load wagtailcore_tags %}
+
+<section class="fade-in-section px-[5%] py-8 md:py-8 lg:py-10">
+  {% if value.title %}
+    <div class="container mb-12 w-full max-w-lg md:mb-18 lg:mb-20 text-center">
+      <h2 class="text-4xl font-bold leading-[1.2] md:text-5xl lg:text-6xl">
+        {{ value.title }}
+      </h2>
+      {% if value.intro_text %}
+        <div class="mt-6 md:text-md">
+          {{ value.intro_text|richtext }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  
+  <div class="relative w-full md:px-12">
+    <button id="leftButton" onclick="scrollFeatures('left')" aria-label="Scroll features left" class="invisible md:visible absolute left-0 top-[calc(50%-24px)] z-10 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white transition-colors duration-500">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div id="featuresContainer" class="flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth">
+      {% for feature in value.features %}
+        <div class="snap-start flex-none w-[300px] md:w-[400px]">
+          {% include "home/blocks/feature_block.html" with value=feature %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <button id="rightButton" onclick="scrollFeatures('right')" aria-label="Scroll features right" class="invisible md:visible absolute right-0 top-[calc(50%-24px)] z-10 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white transition-colors duration-500">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .button-highlight {
+    background-color: rgb(236, 72, 153) !important;
+  }
+</style>
+
+<script>
+  // Existing scroll function
+  function scrollFeatures(direction) {
+    const container = document.getElementById('featuresContainer');
+    const scrollAmount = container.offsetWidth;
+    
+    if (direction === 'left') {
+      container.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    } else {
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  // Add highlight effect on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = [
+      document.getElementById('leftButton'),
+      document.getElementById('rightButton')
+    ];
+
+    // Add highlight with delay between buttons
+    setTimeout(() => {
+      buttons[0].classList.add('button-highlight');
+      setTimeout(() => {
+        buttons[0].classList.remove('button-highlight');
+        buttons[1].classList.add('button-highlight');
+        setTimeout(() => {
+          buttons[1].classList.remove('button-highlight');
+        }, 1000);
+      }, 1000);
+    }, 500);
+  });
+</script>

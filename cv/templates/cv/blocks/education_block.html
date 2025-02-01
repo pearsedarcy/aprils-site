@@ -1,0 +1,19 @@
+<div class="mb-8">
+    <div class="flex justify-between items-start mb-2">
+        <div>
+            <h3 class="text-xl font-semibold text-gray-900">{{ value.degree }}</h3>
+            <p class="text-lg text-gray-600">{{ value.institution }}</p>
+        </div>
+        <div class="text-sm text-gray-500">
+            {{ value.date_from|date:"M Y" }} - 
+            {% if value.date_to %}
+                {{ value.date_to|date:"M Y" }}
+            {% else %}
+                Present
+            {% endif %}
+        </div>
+    </div>
+    <div class="prose max-w-none text-gray-700">
+        {{ value.description|richtext }}
+    </div>
+</div>

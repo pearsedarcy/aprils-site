@@ -13,32 +13,62 @@
         {% endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="{% if page.search_description %}{{
+        page.search_description }}{% else %}{{ current_site.site_name }}D - April
+        'Arcy PhD.{% endif %}" />
+        <meta name="robots" content="index, follow">
+      
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}" />
+        <meta property="og:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ request.get_full_path|slice:'1:' }}" />
+        {% if page.og_image %}
+        <meta property="og:image" content="{{ page.og_image.url }}" />
+        {% endif %}
+        
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
+        <meta name="twitter:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}{{ current_site.site_name }} - Your trusted source for information and insights{% endif %}">
+        {% if page.og_image %}
+        <meta name="twitter:image" content="{{ page.og_image.url }}">
+        {% endif %}
+
         {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}
         <base target="_blank">
         {% endif %}
 
-        {# Add supported color schemes: #}
-        <meta name="color-scheme" content="light dark">
-
         {# Add a favicon with inline SVG: #}
         <link rel="icon" href="data:image/svg+xml,<svg
         xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text
-        y=%22.9em%22 font-size=%2290%22>🧪</text></svg>"/>
+        y=%22.9em%22 font-size=%2290%22>🦠</text></svg>"/>
         
         <!-- Add this line to include Tailwind CSS -->
         <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" type="text/css">
 
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/poxed.css' %}">
-
-        {% block extra_css %}{% endblock %}
+        <link rel="stylesheet" href="{% static 'css/transitions.css' %}">
+        {% block extra_css %}
+    {% endblock %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+        <script src="{% static 'js/page-transitions.js' %}"></script>
         {% include "includes/header.html" %}
         <main id="main">
-        {% block content %}{% endblock %}
+            <div class="main-transition">
+                <div id="page-logo-tranny">
+                {% include "includes/logo.html" with logo=logo %}
+                </div>
+            </div>
+            <div class="main-content">
+                {% block content %}{% endblock %}
+            </div>
         </main>
         <!-- Footer partial -->
         {% include "includes/footer.html" %}

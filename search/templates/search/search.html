@@ -6,33 +6,72 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<h1>Search</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-brand-primary mb-8">Search</h1>
 
-<form action="{% url 'search' %}" method="get">
-    <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
-</form>
+    <form action="{% url 'search' %}" method="get" class="mb-8">
+        <div class="flex gap-2">
+            <input type="text" 
+                   name="query" 
+                   {% if search_query %}value="{{ search_query }}"{% endif %}
+                   class="flex-1 rounded-lg border-2 border-brand-secondary focus:border-brand-primary focus:ring-brand-primary"
+                   placeholder="Enter your search term...">
+            <button type="submit" 
+                    class="px-6 py-2 bg-brand-primary hover:bg-brand-secondary text-white rounded-lg transition-colors duration-200">
+                Search
+            </button>
+        </div>
+    </form>
 
-{% if search_results %}
-<ul>
-    {% for result in search_results %}
-    <li>
-        <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
-        {% if result.search_description %}
-        {{ result.search_description }}
+    {% if search_results %}
+        <div class="mb-6 text-neutral-dark">
+            <p>You searched{% if search_query %} for "<span class="font-medium text-brand-primary">{{ search_query }}</span>"{% endif %}, 
+            <span class="font-medium">{{ search_results.paginator.count }}</span> result{{ search_results.paginator.count|pluralize }} found.</p>
+        </div>
+
+        <ol class="space-y-6">
+            {% for result in search_results %}
+            <li class="p-6 bg-white rounded-lg shadow-small hover:shadow-medium transition-shadow duration-200">
+                <h4 class="text-xl mb-2">
+                    <a href="{% pageurl result %}" class="text-brand-primary hover:text-brand-secondary">{{ result }}</a>
+                </h4>
+                {% if result.search_description %}
+                <p class="text-neutral mb-2">{{ result.search_description }}</p>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ol>
+
+        {% if search_results.paginator.num_pages > 1 %}
+        <div class="mt-8 flex flex-col items-center gap-4">
+            <p class="text-neutral text-sm">
+                Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}, 
+                showing {{ search_results|length }} result{{ search_results|pluralize }} 
+                out of {{ search_results.paginator.count }}
+            </p>
+
+            <div class="flex gap-3">
+                {% if search_results.has_previous %}
+                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}"
+                   class="px-4 py-2 bg-brand-accent hover:bg-brand-accent2 text-neutral-darker rounded-lg transition-colors duration-200">
+                    Previous
+                </a>
+                {% endif %}
+
+                {% if search_results.has_next %}
+                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}"
+                   class="px-4 py-2 bg-brand-accent hover:bg-brand-accent2 text-neutral-darker rounded-lg transition-colors duration-200">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
         {% endif %}
-    </li>
-    {% endfor %}
-</ul>
 
-{% if search_results.has_previous %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
-{% endif %}
-
-{% if search_results.has_next %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
-{% endif %}
-{% elif search_query %}
-No results found
-{% endif %}
+    {% elif search_query %}
+        <div class="p-8 text-center bg-background-error bg-opacity-10 rounded-lg">
+            <p class="text-xl text-error-red">No results found</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

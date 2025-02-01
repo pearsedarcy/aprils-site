@@ -1,0 +1,82 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% if value.style == 'background' %}
+  <section class="relative min-h-[90vh] flex items-end px-[5%] py-8 md:py-12 lg:py-18 hero-background">
+    {% if value.image %}
+      {% image value.image fill-2000x1200 as bg_image %}
+      <div class="absolute inset-0 z-0">
+        <img src="{{ bg_image.url }}" alt="{{ bg_image.alt }}" class="w-full h-full object-cover object-top" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
+      </div>
+    {% endif %}
+    
+    <div class="relative z-10 lg:w-[40%]">
+      <div class="max-w-3xl text-white">
+        <h1 class="text-3xl font-bold md:text-4xl lg:text-6xl mb-6 lg:w-[50%]">
+          {{ value.heading }}
+        </h1>
+        <div class="md:text-md text-white/90">
+          {{ value.text|richtext }}
+        </div>
+        <div class="mt-8 flex flex-wrap gap-4">
+              {% if value.primary_button_text %}
+              <a href="{% if value.primary_button_page %}{% pageurl value.primary_button_page %}{% else %}{{ value.primary_button_url }}{% endif %}" 
+              {% if value.primary_button_url %}target="_blank"{% endif %}
+              class="bg-white text-black hover:bg-gray-100 inline-flex gap-3 items-center justify-center whitespace-nowrap px-6 py-3 font-semibold transition-colors">
+              {{ value.primary_button_text }}
+              </a>
+          {% endif %}
+          {% if value.secondary_button_text %}
+          <a href="{% if value.secondary_button_page %}{% pageurl value.secondary_button_page %}{% else %}{{ value.secondary_button_url }}{% endif %}"
+          {% if value.secondary_button_url %}target="_blank"{% endif %}
+          class="border-2 border-white text-white hover:bg-white hover:text-black inline-flex gap-3 items-center justify-center whitespace-nowrap px-6 py-3 font-semibold transition-colors">
+              {{ value.secondary_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% else %}
+  <!-- Original split content style -->
+  <section class="px-[5%] py-8 md:py-12 lg:py-18">
+    <div class="container">
+      <div class="grid grid-cols-1 items-start gap-x-12 gap-y-5 md:grid-cols-2 md:gap-y-8 lg:gap-x-20 lg:gap-y-16">
+        <div>
+          <h1 class="text-6xl font-bold md:text-9xl lg:text-10xl">{{ value.heading }}</h1>
+        </div>
+        <div>
+          <div class="md:text-md">{{ value.text|richtext }}</div>
+          <div class="mt-6 flex flex-wrap gap-4 md:mt-8">
+            {% if value.primary_button_text %}
+            <a href="{% if value.primary_button_page %}{% pageurl value.primary_button_page %}{% else %}{{ value.primary_button_url }}{% endif %}" 
+            {% if value.primary_button_url %}target="_blank"{% endif %}
+            class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3">
+                {{ value.primary_button_text }}
+              </a>
+            {% endif %}
+            {% if value.secondary_button_text %}
+            <a href="{% if value.secondary_button_page %}{% pageurl value.secondary_button_page %}{% else %}{{ value.secondary_button_url }}{% endif %}"
+            {% if value.secondary_button_url %}target="_blank"{% endif %}
+            class="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary text-text-primary bg-background-primary px-6 py-3">
+                {{ value.secondary_button_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% if value.image %}
+        <div class="mt-8">
+          {% image value.image fill-1920x1080 %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}
+
+<style>
+  .hero-background {
+    background-color: theme('colors.gray.900');
+  }
+</style>
