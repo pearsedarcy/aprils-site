@@ -26,14 +26,25 @@ DEBUG = env('DEBUG')
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com', '.herokuapp.com']
 
+
 # Security settings
 SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_DOMAIN = None
 CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_DOMAIN = None
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Let Cloudflare manage HSTS
 SECURE_HSTS_PRELOAD = False
+
+# CSRF and Security Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://april.darcy.phd',
+    'https://darcy.phd',
+    'https://www.darcy.phd',
+    'https://april-wag-2899b9245e95.herokuapp.com',
+]
 
 # Cloudflare configuration
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -57,12 +68,7 @@ CLOUDFLARE_IPS = [
     '131.0.72.0/22',
 ]
 
-# CSRF and Security Settings
-CSRF_TRUSTED_ORIGINS = [
-    'https://darcy.phd',
-    'https://www.darcy.phd',
-    'https://april-wag-2899b9245e95.herokuapp.com',
-]
+
 
 # Ensure consistent URL scheme
 PREPEND_WWW = False
@@ -82,18 +88,8 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
     '.herokuapp.com',
 ]
 
-# CSRF settings with proper origins
-CSRF_TRUSTED_ORIGINS = [
-    'https://darcy.phd',
-    'https://www.darcy.phd',
-    'https://april-wag-2899b9245e95.herokuapp.com',
-]
 
-# Session and cookie settings
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_DOMAIN = None  # Allow the cookie to work on all domains
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = None
+
 
 # Database
 DATABASES = {
