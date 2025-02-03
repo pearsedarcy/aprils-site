@@ -13,6 +13,16 @@
         {% endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SVSWE66G52"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'G-SVSWE66G52');
+        </script>
+
         <!-- SEO Meta Tags -->
         <meta name="description" content="{% if page.search_description %}{{
         page.search_description }}{% else %}{{ current_site.site_name }}D - April
