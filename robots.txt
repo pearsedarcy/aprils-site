@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /static/
+Allow: /media/
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /django-admin/
+Disallow: /documents/
+Disallow: /cms/
+Disallow: /search/
+Disallow: /*?*
+
+# Add crawl delay to prevent overwhelming server
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://darcy.phd/sitemap.xml
