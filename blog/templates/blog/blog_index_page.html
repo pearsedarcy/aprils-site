@@ -23,33 +23,37 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for post in blogpages %}
                 {% with post=post.specific %}
-                    <a href="{% pageurl post %}" class="group block">
-                        <article class="bg-white rounded-lg shadow-medium hover:shadow-large transition-shadow duration-300 overflow-hidden h-full border border-neutral-lightest hover:border-brand-secondary">
-                            {% with post.main_image as main_image %}
-                                {% if main_image %}
-                                    <div class="aspect-w-16 aspect-h-9">
-                                        {% image main_image fill-800x450 class="w-full h-full object-cover" %}
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-                            
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold mb-3 text-brand-primary group-hover:text-brand-secondary transition-colors duration-300">
-                                    {{ post.title }}
-                                </h2>
-                                
-                                {% if post.intro %}
-                                <p class="text-neutral mb-4 line-clamp-3">
-                                    {{ post.intro }}
-                                </p>
-                                {% endif %}
-                                
-                                <div class="prose prose-sm max-w-none text-neutral-dark">
-                                    {{ post.body|richtext }}
+                    <article class="bg-white rounded-lg shadow-medium hover:shadow-large transition-shadow duration-300 overflow-hidden h-full border border-neutral-lightest hover:border-brand-secondary">
+                        {% with post.main_image as main_image %}
+                            {% if main_image %}
+                                <div class="aspect-w-16 aspect-h-9">
+                                    {% image main_image fill-800x450 class="w-full h-full object-cover" %}
                                 </div>
+                            {% endif %}
+                        {% endwith %}
+                        
+                        <div class="p-6">
+                            <h2 class="text-xl font-bold mb-3">
+                                <a href="{% pageurl post %}" class="text-brand-primary hover:text-brand-secondary transition-colors duration-300">
+                                    {{ post.title }}
+                                </a>
+                            </h2>
+                            
+                            {% if post.intro %}
+                            <p class="text-neutral mb-4 line-clamp-3">
+                                {{ post.intro }}
+                            </p>
+                            {% endif %}
+                            
+                            <div class="prose prose-sm max-w-none text-neutral-dark mb-4">
+                                {{ post.body|richtext|truncatewords_html:25 }}
                             </div>
-                        </article>
-                    </a>
+                            
+                            <a href="{% pageurl post %}" class="inline-block text-brand-primary font-medium hover:text-brand-secondary transition-colors duration-300">
+                                Read more
+                            </a>
+                        </div>
+                    </article>
                 {% endwith %}
             {% endfor %}
         </div>

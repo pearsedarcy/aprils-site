@@ -6,7 +6,7 @@ DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-rx0-x-@kwk$ay1n$(p01#ovrtx+h0=60cbj^s+xq_nd8v=(4_k"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "april.darcy.phd"]
 
 # Development-specific installed apps
 INSTALLED_APPS = INSTALLED_APPS + [
