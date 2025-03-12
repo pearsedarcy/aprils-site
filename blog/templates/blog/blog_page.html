@@ -34,7 +34,7 @@
             </div>
         {% endif %}
 
-        <div class="prose lg:prose-lg max-w-none mb-12">
+        <div class="prose break-all lg:prose-lg max-w-none mb-12">
             {{ page.body|richtext }}
         </div>
 
@@ -51,13 +51,13 @@
             </div>
         {% endif %}
 
-        <footer class="mt-[8rem] pt-6 border-t border-neutral-lightest">
+        <footer class="mt-20 pt-6 border-t border-neutral-lightest">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <a href="{{ page.get_parent.url }}" class="inline-flex items-center text-brand-primary hover:text-brand-secondary transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
-                    Back to blog
+                    <span class="break-all">Back to blog</span>
                 </a>
 
                 {% with tags=page.tags.all %}
@@ -65,7 +65,7 @@
                         <div class="flex flex-wrap gap-2">
                             {% for tag in tags %}
                                 <a href="{% slugurl 'tags' %}?tag={{ tag }}" 
-                                   class="px-3 py-1 bg-brand-primary/10 text-brand-primary rounded-full text-sm hover:bg-brand-primary hover:text-white transition-colors duration-300">
+                                   class="px-3 py-1 bg-brand-primary/10 text-brand-primary rounded-full text-sm hover:bg-brand-primary hover:text-white transition-colors duration-300 break-all">
                                     {{ tag }}
                                 </a>
                             {% endfor %}
