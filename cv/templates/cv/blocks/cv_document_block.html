@@ -5,7 +5,7 @@
     {% if value.document %}
         <div class="mb-4 flex justify-end w-full">
             <a href="{{ value.document.file.url }}" 
-               class="download-cv-btn inline-flex items-center px-6 py-3 bg-brand-primary text-neutral-white rounded-lg hover:bg-brand-secondary transition-colors shadow-small hover:shadow-medium"
+               class="btn btn-primary"
                onclick="handleDownload(event, this.href)"
                rel="noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,7 +15,7 @@
             </a>
         </div>
     {% endif %}
-    <div class="w-full bg-neutral-lightest rounded-lg shadow-medium overflow-hidden">
+    <div class="w-full bg-base-100 rounded-lg shadow-lg overflow-hidden">
         {% if value.document %}
             <object
                 data="{{ value.document.file.url }}"
@@ -23,21 +23,21 @@
                 class="w-full h-[800px]"
             >
                 <div class="p-6 text-center">
-                    <p class="text-neutral-dark mb-4">
+                    <p class="mb-4">
                         Your browser doesn't support PDF embedding.
                     </p>
                     <a href="{{ value.document.file.url }}" 
-                       class="inline-flex items-center text-brand-primary hover:text-brand-secondary underline font-medium"
+                       class="btn btn-outline"
                        download="{{ value.document.filename }}"
                        target="_blank"
                        rel="noopener noreferrer">
                         Click here to download the PDF file
-                        <span class="text-neutral ml-1">({{ value.document.title }})</span>
+                        <span class="ml-1">({{ value.document.title }})</span>
                     </a>
                 </div>
             </object>
         {% else %}
-            <p class="p-6 text-neutral text-center">No CV document uploaded</p>
+            <p class="p-6 text-center">No CV document uploaded</p>
         {% endif %}
     </div>
     

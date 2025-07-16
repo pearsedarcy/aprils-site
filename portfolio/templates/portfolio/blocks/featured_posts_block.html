@@ -1,6 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<section id="featured-blog-posts" class="px-[5%] py-8 md:py-12 lg:py-16 bg-neutral-50">
+<section id="featured-blog-posts" class="px-[5%] py-8 md:py-12 lg:py-16 bg-base-100">
   <div class="container mx-auto">
     <!-- Header -->
     <div class="max-w-2xl mx-auto text-left mb-12">
@@ -15,7 +15,7 @@
     <!-- Posts Container - Scrollable until lg screens -->
     <div class="flex lg:grid overflow-x-auto lg:overflow-hidden pb-4 lg:pb-0 gap-6 lg:gap-8 lg:grid-cols-3 snap-x snap-mandatory scrollbar-hide">
       {% for post in self.posts %}
-        <a href="{% pageurl post %}" class="group flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-auto bg-white shadow-sm hover:shadow-md transition-all duration-300 relative transform hover:-translate-y-1 snap-start">
+        <a href="{% pageurl post %}" class="group flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-auto bg-base-100 shadow-sm hover:shadow-md transition-all duration-300 relative transform hover:-translate-y-1 snap-start">
           <article>
             <!-- Featured Image -->
             {% if post.specific.main_image %}
@@ -27,22 +27,22 @@
             <!-- Content -->
             <div class="p-6">
               <!-- Date -->
-              <time class="text-sm text-gray-500 mb-2 block">
+              <time class="text-sm mb-2 block">
                 {{ post.specific.date|date:"F j, Y" }}
               </time>
 
               <!-- Title -->
-              <h3 class="text-xl font-bold mb-3 group-hover:text-green-600 transition-colors">
+              <h3 class="text-xl font-bold mb-3 group-hover:underline">
                 {{ post.title }}
               </h3>
 
               <!-- Intro -->
-              <p class="text-gray-600 mb-4 line-clamp-2">
+              <p class="mb-4 line-clamp-2">
                 {{ post.specific.intro }}
               </p>
 
               <!-- Visual indicator for clickable card -->
-              <span class="inline-flex items-center text-green-600 group-hover:text-green-700 font-medium">
+              <span class="inline-flex items-center font-medium">
                 Read More
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
