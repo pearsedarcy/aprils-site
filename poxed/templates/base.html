@@ -15,8 +15,7 @@
 
         <!-- SEO Meta Tags -->
         <meta name="description" content="{% if page.search_description %}{{
-        page.search_description }}{% else %}{{ current_site.site_name }}D - April
-        'Arcy PhD.{% endif %}" />
+        page.search_description }}{% else %}{{ current_site.site_name }}{% endif %}" />
         <meta name="robots" content="index, follow">
       
 
@@ -48,7 +47,7 @@
         y=%22.9em%22 font-size=%2290%22>🦠</text></svg>"/>
         
         <!-- Add this line to include Tailwind CSS -->
-        <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" type="text/css">
+        {% tailwind_css %}
 
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/poxed.css' %}">
@@ -57,11 +56,11 @@
     {% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="flex flex-col min-h-screen {% block body_class %}{% endblock %}">
         <script src="{% static 'js/page-transitions.js' %}"></script>
         {% include "includes/header.html" %}
-        <main id="main">
-            <div class="main-transition">
+        <main id="main" class="flex-1">
+            <div class="main-transition bg-base-200">
                 <div id="page-logo-tranny">
                 {% include "includes/logo.html" with logo=logo %}
                 </div>
@@ -77,5 +76,18 @@
         <script type="text/javascript" src="{% static 'js/poxed.js' %}"></script>
 
         {% block extra_js %}{% endblock %}
+        <!-- DaisyUI Theme Switcher Script  -->
+        <script>
+        function setTheme(theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme) {
+            setTheme(savedTheme);
+          }
+        });
+        </script>
     </body>
 </html>

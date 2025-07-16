@@ -44,4 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    // DaisyUI Theme Switcher Script 
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+    });
+    
 });

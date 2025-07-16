@@ -512,6 +512,7 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
         require('@tailwindcss/aspect-ratio'),
+        require('daisyui'), // Add DaisyUI plugin
         ({ addComponents }) => {
             const newComponents = {
               ".animate-disable": {
@@ -534,4 +535,9 @@ module.exports = {
             addComponents(newComponents);
           },
     ],
+    daisyui: {
+        themes: [
+            "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"
+        ],
+    },
 }

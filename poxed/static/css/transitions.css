@@ -14,8 +14,7 @@ main.loaded {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: #ffffff;
+    height: 100%;/* DaisyUI base-100 background */
     z-index: 100;
     pointer-events: none;
     opacity: 0;
