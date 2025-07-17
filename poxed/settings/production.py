@@ -24,7 +24,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = env('DEBUG')
 SECRET_KEY = env('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = env('ALLOWED_HOSTS') + ['darcy.phd', 'www.darcy.phd', 'april-wag-2899b9245e95.herokuapp.com', '.herokuapp.com']
 
 # Security settings
 SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
@@ -59,9 +58,7 @@ CLOUDFLARE_IPS = [
 
 # CSRF and Security Settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://darcy.phd',
-    'https://www.darcy.phd',
-    'https://april-wag-2899b9245e95.herokuapp.com',
+    'https://meg-834055808010.herokuapp.com/',
 ]
 
 # Ensure consistent URL scheme
@@ -76,17 +73,14 @@ SECURE_SSL_HOST = None  # Don't force a specific host for SSL
 
 # Update ALLOWED_HOSTS with all variations
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
-    'darcy.phd',
-    'www.darcy.phd',
-    'april-wag-2899b9245e95.herokuapp.com',
+    'https://meg-834055808010.herokuapp.com/',
     '.herokuapp.com',
 ]
 
 # CSRF settings with proper origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://darcy.phd',
-    'https://www.darcy.phd',
-    'https://april-wag-2899b9245e95.herokuapp.com',
+    'https://meg-834055808010.herokuapp.com/',
+
 ]
 
 # Session and cookie settings
