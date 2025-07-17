@@ -41,3 +41,8 @@ def get_site_logo():
 @register.simple_tag
 def get_header_config_footer():
     return HeaderConfiguration.objects.filter(live=True).first()
+
+@register.simple_tag
+def get_site_favicon():
+    from base.models import SiteFavicon
+    return SiteFavicon.objects.first()

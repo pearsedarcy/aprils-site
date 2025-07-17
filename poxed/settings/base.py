@@ -110,6 +110,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
+                "poxed.context_processors.daisyui_themes_context",
             ],
         },
     },
@@ -237,6 +238,8 @@ WAGTAILADMIN_BASE_URL = "https://darcy.phd"
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
 
+WAGTAILIMAGES_EXTENSIONS = ["gif", "jpg", "jpeg", "png", "webp", "svg"]
+
 WAGTAILDOCS_CONTENT_TYPES = {
     'pdf': 'application/pdf',
     'txt': 'text/plain',
@@ -268,3 +271,11 @@ DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
 # Development-only settings should be moved to dev.py
 if DEBUG:
     NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"
+
+
+def daisyui_themes_context(request):
+    return {
+        "daisyui_themes": [
+            'light','dark','cupcake','bumblebee','emerald','corporate','synthwave','retro','cyberpunk','valentine','halloween','garden','forest','aqua','lofi','pastel','fantasy','wireframe','black','luxury','dracula','cmyk','autumn','business','acid','lemonade','night','coffee','winter','dim','nord','sunset','caramellatte','abyss','silk'
+        ]
+    }

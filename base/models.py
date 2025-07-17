@@ -203,6 +203,30 @@ class SiteLogo(models.Model):
         verbose_name = "Site Logo"
         verbose_name_plural = "Site Logo"
 
+@register_snippet
+class SiteFavicon(models.Model):
+    favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="Favicon"
+    )
+    alt_text = models.CharField(max_length=100, blank=True)
+
+    panels = [
+        FieldPanel('favicon'),
+        FieldPanel('alt_text'),
+    ]
+
+    def __str__(self):
+        return "Site Favicon"
+
+    class Meta:
+        verbose_name = "Site Favicon"
+        verbose_name_plural = "Site Favicon"
+
 class FormField(AbstractFormField):
     page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')
 
