@@ -1,13 +1,14 @@
 {% comment %} DaisyUI Theme Switcher Partial {% endcomment %}
-<div class="dropdown dropdown-left absolute top-11 right-8 z-50">
-  <label tabindex="0" class="m-1" aria-label="Change theme">
+<div class="dropdown dropdown-left relative ">
+  <label tabindex="0" class="m-1 btn btn-ghost hover:cursor-help transition-all duration-200" aria-label="Change theme">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
     fill="none" viewBox="0 0 24 24" stroke="currentColor"
     class="hover:scale-125 hover:cursor-help transition-all duration-200">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71m16.97 0l-.71-.71M4.05 4.93l-.71-.71M21 12h-1M4 12H3m9 5a5 5 0 100-10 5 5 0 000 10z" />
     </svg>
   </label>
-  <ul tabindex="0" class="dropdown-content mt-16 bg-base-200 rounded-box w-80 p-3 shadow-2xl max-h-[32rem] overflow-y-auto">
+  <ul tabindex="0" class="dropdown-content absolute right-0 z-50 bg-base-200
+  rounded-box w-56 p-3 shadow-2xl max-h-[32rem]  overflow-y-auto">
     <li class="px-2 py-2 text-sm text-base-content/70 font-semibold">Theme</li>
     {% for theme in daisyui_themes %}
     <li>
@@ -26,7 +27,7 @@
   </ul>
 </div>
 <script>
-// Simplified DaisyUI theme swapper logic for checkmark visibility
+// DaisyUI theme swapper logic for checkmark visibility and theme persistence
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
