@@ -173,9 +173,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 STATICFILES_DIRS = [
-      os.path.join(PROJECT_DIR, "static"),
-      os.path.join(BASE_DIR, "theme/static"),
-  ]
+    os.path.join(PROJECT_DIR, "static"),
+    os.path.join(BASE_DIR, "theme/static"),
+]
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

@@ -73,9 +73,13 @@ SECURE_SSL_HOST = None  # Don't force a specific host for SSL
 
 # Update ALLOWED_HOSTS with all variations
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
-    'meg-834055808010.herokuapp.com/',
+    'localhost',
+    '127.0.0.1',
+    'meg-834055808010.herokuapp.com',
     '.herokuapp.com',
 ]
+# Add staticfiles storage for production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CSRF settings with proper origins
 CSRF_TRUSTED_ORIGINS = [
