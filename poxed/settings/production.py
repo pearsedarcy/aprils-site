@@ -73,7 +73,7 @@ SECURE_SSL_HOST = None  # Don't force a specific host for SSL
 
 # Update ALLOWED_HOSTS with all variations
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
-    'https://meg-834055808010.herokuapp.com/',
+    'meg-834055808010.herokuapp.com/',
     '.herokuapp.com',
 ]
 
