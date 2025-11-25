@@ -1,27 +1,41 @@
 """
 Build-time settings for Docker image creation.
-Uses simpler storage backends to avoid manifest issues during collectstatic.
+Uses a dummy database but the same static files storage as production
+to ensure the manifest is generated correctly.
 """
-from .production import *
+from .base import *
+import os
 
-# Use simpler static files storage during build to avoid WhiteNoise manifest issues
-# The production storage will be used at runtime
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
+DEBUG = False
+SECRET_KEY = 'build-secret-key-not-for-production'
 
-# Also set the legacy setting for compatibility
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+ALLOWED_HOSTS = ['*']
 
-# Disable database SSL for build (using SQLite)
+# Use the same static files storage as production (WhiteNoise with manifest)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, "static"),
+    os.path.join(BASE_DIR, "theme/static"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+
+# Dummy database for build (just needs to not error on collectstatic)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '/tmp/build.db',
     }
 }
+
+# Dummy Cloudinary settings for build
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dummy',
+    'API_KEY': 'dummy',
+    'API_SECRET': 'dummy',
+}
+
+# Use filesystem for media during build
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
