@@ -47,14 +47,18 @@ nano .env  # Edit with your actual values
 Edit `.env` with your production values:
 
 ```env
+# Django Settings
 DJANGO_SECRET_KEY=your-generated-secret-key
 DEBUG=False
 ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+WAGTAILADMIN_BASE_URL=https://yourdomain.com
 
-# Database (use PostgreSQL for production)
-DATABASE_URL=postgres://user:password@host:5432/dbname
+# Database (PostgreSQL included in docker-compose)
+DATABASE_URL=postgres://wagtail:your-secure-password@db:5432/wagtail
+POSTGRES_PASSWORD=your-secure-password
 
-# Cloudinary
+# Cloudinary (for media storage)
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
@@ -66,24 +70,31 @@ EMAIL_HOST_USER=your@email.com
 EMAIL_HOST_PASSWORD=your-password
 ```
 
+**Important:** The `POSTGRES_PASSWORD` must match the password in `DATABASE_URL`.
+
 ### 4. Build and Deploy
 
 ```bash
 # Build the Docker image
 docker compose build
 
-# Start the containers
+# Start the containers (web + PostgreSQL database)
 docker compose up -d
 
-# Check logs
+# Check logs (both services)
+docker compose logs -f
+
+# Check just the web service
 docker compose logs -f web
 
-# Run migrations (if not done automatically)
+# Migrations run automatically on startup, but you can run manually if needed:
 docker compose exec web python manage.py migrate
 
 # Create superuser
 docker compose exec web python manage.py createsuperuser
 ```
+
+**Note:** The docker-compose.yml includes PostgreSQL by default. The web service will wait for the database to be healthy before starting.
 
 ## Production Setup with Nginx and SSL
 
@@ -156,36 +167,31 @@ CSRF_TRUSTED_ORIGINS = [
 
 ## Using PostgreSQL Database
 
-### Option 1: Hetzner Managed Database
+PostgreSQL is **included by default** in docker-compose.yml. The database runs as a separate container and the web service automatically waits for it to be ready.
+
+### Default Setup (Docker PostgreSQL)
+
+The default configuration uses a PostgreSQL container. Just ensure your `.env` has matching passwords:
+
+```env
+DATABASE_URL=postgres://wagtail:your-secure-password@db:5432/wagtail
+POSTGRES_PASSWORD=your-secure-password
+```
+
+### Option: Hetzner Managed Database
+
+If you prefer using Hetzner's managed PostgreSQL:
 
 1. Create a managed PostgreSQL database in Hetzner Cloud Console
-2. Copy the connection string to your `.env` file
+2. Update your `.env` with the external connection string:
 
-### Option 2: Self-hosted PostgreSQL with Docker
-
-Uncomment the PostgreSQL service in `docker-compose.yml`:
-
-```yaml
-services:
-  db:
-    image: postgres:16-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=wagtail
-      - POSTGRES_USER=wagtail
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-```
-
-Update `.env`:
 ```env
-DATABASE_URL=postgres://wagtail:yourpassword@db:5432/wagtail
-POSTGRES_PASSWORD=yourpassword
+DATABASE_URL=postgres://user:password@your-hetzner-db-host:5432/dbname
 ```
+
+3. Comment out or remove the `db` service from `docker-compose.yml` if not needed
+
+**Note:** SSL is automatically enabled for external database connections, but disabled for Docker internal connections (`db:5432`).
 
 ## Useful Commands
 
@@ -221,17 +227,29 @@ cat backup.sql | docker compose exec -T db psql -U wagtail wagtail
 ### Container won't start
 ```bash
 docker compose logs web
+docker compose logs db
 ```
 
 ### Static files not loading
 ```bash
-docker compose exec web python manage.py collectstatic --noinput
+# Static files are collected during Docker build
+# If needed, rebuild the image:
+docker compose build --no-cache
+docker compose up -d
 ```
 
 ### Database connection errors
-- Check `DATABASE_URL` in `.env`
-- Ensure database container is running: `docker compose ps`
+- Ensure `POSTGRES_PASSWORD` in `.env` matches the password in `DATABASE_URL`
+- Check database container is running: `docker compose ps`
 - Check database logs: `docker compose logs db`
+- Verify the web container waited for db: `docker compose logs web | grep -i database`
+
+### Build fails with static files error
+The Docker build uses a special `build.py` settings file that avoids WhiteNoise manifest issues. If you still see errors:
+```bash
+# Force rebuild without cache
+docker compose build --no-cache
+```
 
 ### 502 Bad Gateway
 - Check if the web container is running: `docker compose ps`
@@ -244,13 +262,50 @@ docker compose exec web python manage.py collectstatic --noinput
 
 ## Security Checklist
 
-- [ ] Change default passwords
+- [ ] Change default `POSTGRES_PASSWORD` from 'changeme'
+- [ ] Generate a secure `DJANGO_SECRET_KEY`
 - [ ] Set `DEBUG=False`
-- [ ] Use HTTPS (SSL certificate installed)
-- [ ] Configure firewall (ufw)
+- [ ] Configure `ALLOWED_HOSTS` with your domain
+- [ ] Configure `CSRF_TRUSTED_ORIGINS` with https:// URLs
+- [ ] Use HTTPS (SSL certificate installed via Certbot)
+- [ ] Configure firewall (ufw) - only expose ports 22, 80, 443
 - [ ] Regular backups configured
 - [ ] Monitor disk space
 - [ ] Keep Docker and system updated
+
+## Architecture Overview
+
+The deployment uses a multi-container setup:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Hetzner Server                           │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                    Nginx                             │   │
+│  │            (Reverse Proxy + SSL)                     │   │
+│  │                 :80 / :443                           │   │
+│  └─────────────────────┬───────────────────────────────┘   │
+│                        │                                    │
+│  ┌─────────────────────▼───────────────────────────────┐   │
+│  │              Docker Compose                          │   │
+│  │  ┌─────────────────┐    ┌─────────────────────────┐ │   │
+│  │  │   web (Gunicorn)│◄──►│   db (PostgreSQL)       │ │   │
+│  │  │   127.0.0.1:8000│    │   internal:5432         │ │   │
+│  │  └─────────────────┘    └─────────────────────────┘ │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  Media Storage: Cloudinary (external)                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Settings Files
+
+| File | Purpose |
+|------|---------|
+| `poxed/settings/base.py` | Shared settings for all environments |
+| `poxed/settings/dev.py` | Local development (SQLite, debug tools) |
+| `poxed/settings/production.py` | Production (PostgreSQL, Cloudinary, security) |
+| `poxed/settings/build.py` | Docker build only (simple static storage) |
 
 ---
 
