@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+
+{% if value.text %}
+<a href="{% if value.page %}{% pageurl value.page %}{% else %}{{ value.url }}{% endif %}"
+   {% if value.url and not value.page %}target="_blank" rel="noopener"{% endif %}
+   class="btn {% if value.style == 'primary' %}btn-primary{% elif value.style == 'secondary' %}btn-secondary{% elif value.style == 'ghost' %}btn-ghost{% else %}btn-primary{% endif %}">
+    {{ value.text }}
+</a>
+{% endif %}

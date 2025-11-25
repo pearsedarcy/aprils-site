@@ -230,7 +230,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-# WAGTAILADMIN_BASE_URL = "https://darcy.phd"
+WAGTAILADMIN_BASE_URL = env('WAGTAILADMIN_BASE_URL', default='http://localhost:8000')
 
 # Allowed file extensions for documents in the document library.
 # This can be omitted to allow all files, but note that this may present a security risk
@@ -247,35 +247,20 @@ WAGTAILDOCS_CONTENT_TYPES = {
 
 WAGTAILDOCS_INLINE_CONTENT_TYPES = ['application/pdf', 'text/plain']
 
-# Add these settings at the bottom
-TAILWIND_APP_NAME = 'theme'
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
 # Tailwind Configuration
 TAILWIND_APP_NAME = 'theme'
 TAILWIND_CSS_PATH = 'css/dist/styles.css'
 TAILWIND_JS_PATH = 'js/dist/scripts.js'
 
-# Email Configuration
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# Email Configuration (defaults - override in dev.py/production.py)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# The following settings will be overridden in production.py
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = env('EMAIL_HOST', default='')
+EMAIL_PORT = env('EMAIL_PORT', default=587)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
-
-# Development-only settings should be moved to dev.py
-if DEBUG:
-    NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"
-
-
-def daisyui_themes_context(request):
-    return {
-        "daisyui_themes": [
-            'light','dark','cupcake','bumblebee','emerald','corporate','synthwave','retro','cyberpunk','valentine','halloween','garden','forest','aqua','lofi','pastel','fantasy','wireframe','black','luxury','dracula','cmyk','autumn','business','acid','lemonade','night','coffee','winter','dim','nord','sunset','caramellatte','abyss','silk'
-        ]
-    }
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='')

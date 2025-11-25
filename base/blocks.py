@@ -12,6 +12,70 @@ from wagtail.blocks import (
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageBlock
 
+
+# =============================================================================
+# Shared Button Blocks - Reusable across all apps
+# =============================================================================
+
+class ButtonBlock(StructBlock):
+    """A reusable button block that supports both internal pages and external URLs.
+    
+    Use this block when you need a single button. For dual button patterns
+    (primary/secondary), use DualButtonMixin or include two ButtonBlocks.
+    """
+    text = CharBlock(required=False, help_text="Button text")
+    page = PageChooserBlock(required=False, help_text="Internal page link")
+    url = URLBlock(required=False, help_text="External URL (used if no page selected)")
+    style = ChoiceBlock(
+        choices=[
+            ('primary', 'Primary'),
+            ('secondary', 'Secondary'),
+            ('ghost', 'Ghost'),
+        ],
+        default='primary',
+        required=False,
+        help_text="Button style"
+    )
+
+    def get_url(self, value):
+        """Helper method to get the button URL."""
+        if value.get('page'):
+            return value['page'].url
+        return value.get('url', '')
+
+    class Meta:
+        icon = "link"
+        template = "base/blocks/button_block.html"
+
+
+class DualButtonMixin:
+    """Mixin providing primary and secondary button fields.
+    
+    Use this in StructBlocks that need the common dual-button pattern.
+    Add these fields to your block:
+    
+        primary_button_text = CharBlock(required=False)
+        primary_button_page = PageChooserBlock(required=False)
+        primary_button_url = URLBlock(required=False)
+        secondary_button_text = CharBlock(required=False)
+        secondary_button_page = PageChooserBlock(required=False)
+        secondary_button_url = URLBlock(required=False)
+    """
+    
+    @staticmethod
+    def get_primary_url(value):
+        """Get URL for primary button."""
+        if value.get('primary_button_page'):
+            return value['primary_button_page'].url
+        return value.get('primary_button_url', '')
+    
+    @staticmethod
+    def get_secondary_url(value):
+        """Get URL for secondary button."""
+        if value.get('secondary_button_page'):
+            return value['secondary_button_page'].url
+        return value.get('secondary_button_url', '')
+
 class CaptionedImageBlock(StructBlock):
     image = ImageBlock(required=True)
     caption = CharBlock(required=False)

@@ -1,12 +1,22 @@
 from .base import *
+import shutil
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-rx0-x-@kwk$ay1n$(p01#ovrtx+h0=60cbj^s+xq_nd8v=(4_k"
+# Use environment variable with fallback for development only
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='django-insecure-dev-only-change-in-production')
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "meg-834055808010.herokuapp.com", "*.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+
+# Development database - SQLite for simplicity
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    }
+}
 
 # Development-specific installed apps
 INSTALLED_APPS = INSTALLED_APPS + [
@@ -15,23 +25,6 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "django_extensions",
 ]
 
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, "static"),
-    os.path.join(BASE_DIR, "theme/static"),
-]
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "/static/"
-
 # Correct middleware order is important
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -39,63 +32,42 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
-# Email backend for development
+# Email backend for development - prints to console
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# Tailwind development settings
-NPM_BIN_PATH = "C:/Users/user/AppData/Roaming/npm/npm.cmd"
+# Tailwind development settings - find npm dynamically
+NPM_BIN_PATH = shutil.which('npm') or "npm"
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
 # Debug toolbar configuration
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    'IS_RUNNING_TESTS': False,  # Allow tests to run without debug toolbar errors
 }
 
 # Wagtail settings for development
 WAGTAIL_ENABLE_UPDATE_CHECK = True
 WAGTAIL_ENABLE_WHATS_NEW_BANNER = True
 
+# Use local file storage in development (not Cloudinary)
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# Disable secure cookies in development
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
 try:
     from .local import *
 except ImportError:
     pass
-
-# --- Production-only settings ---
-import dj_database_url
-import environ
-env = environ.Env(
-    DATABASE_URL=(str, None),
-)
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-DATABASES = {
-    'default': dj_database_url.config(
-        default=env('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_DOMAIN = None
-CSRF_COOKIE_DOMAIN = None
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_TIMEOUT = 30
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}

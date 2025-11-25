@@ -1,0 +1,25 @@
+{# 
+Reusable dual button include.
+Usage: {% include "base/includes/dual_buttons.html" with value=value %}
+
+Expects the context to have a 'value' dict with:
+- primary_button_text, primary_button_page, primary_button_url
+- secondary_button_text, secondary_button_page, secondary_button_url
+#}
+{% load wagtailcore_tags %}
+
+{% if value.primary_button_text %}
+<a href="{% if value.primary_button_page %}{% pageurl value.primary_button_page %}{% else %}{{ value.primary_button_url }}{% endif %}"
+   {% if value.primary_button_url and not value.primary_button_page %}target="_blank" rel="noopener"{% endif %}
+   class="btn btn-primary">
+    {{ value.primary_button_text }}
+</a>
+{% endif %}
+
+{% if value.secondary_button_text %}
+<a href="{% if value.secondary_button_page %}{% pageurl value.secondary_button_page %}{% else %}{{ value.secondary_button_url }}{% endif %}"
+   {% if value.secondary_button_url and not value.secondary_button_page %}target="_blank" rel="noopener"{% endif %}
+   class="btn btn-outline">
+    {{ value.secondary_button_text }}
+</a>
+{% endif %}
