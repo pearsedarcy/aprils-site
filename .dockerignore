@@ -2,6 +2,7 @@
 /media/
 /static/
 *.sqlite3
+db.sqlite3
 
 # Python and others
 __pycache__
@@ -9,15 +10,18 @@ __pycache__
 .DS_Store
 *.swp
 /venv/
+/.venv/
 /tmp/
 /.vagrant/
 /Vagrantfile.local
-node_modules/
 /npm-debug.log
 /.idea/
 .vscode
 coverage
 .python-version
+
+# Node modules (but keep theme/static_src for build)
+/node_modules/
 
 # Distribution / packaging
 .Python
@@ -37,3 +41,20 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# Documentation
+/docs/
+README.md
+
+# Environment files (will be passed at runtime)
+.env
+.env.local
+.env.*.local

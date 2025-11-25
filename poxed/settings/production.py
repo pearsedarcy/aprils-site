@@ -26,16 +26,18 @@ DEBUG = env('DEBUG')
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # Security settings
-SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
+SECURE_SSL_REDIRECT = False  # Let reverse proxy (Nginx/Cloudflare) handle this
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Let Cloudflare manage HSTS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Let reverse proxy manage HSTS
 SECURE_HSTS_PRELOAD = False
 
-# Cloudflare configuration
+# Proxy configuration (for Nginx, Cloudflare, etc.)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Cloudflare IPs for proper forwarding
 CLOUDFLARE_IPS = [
@@ -56,36 +58,38 @@ CLOUDFLARE_IPS = [
     '131.0.72.0/22',
 ]
 
-# CSRF and Security Settings
-CSRF_TRUSTED_ORIGINS = [
-    'https://meg-834055808010.herokuapp.com/',
-]
-
 # Ensure consistent URL scheme
 PREPEND_WWW = False
-USE_X_FORWARDED_HOST = True
-USE_X_FORWARDED_PORT = True
-
-# Security and HTTPS settings
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = False  # Let Cloudflare handle this
-SECURE_SSL_HOST = None  # Don't force a specific host for SSL
 
 # Update ALLOWED_HOSTS with all variations
 ALLOWED_HOSTS = env('ALLOWED_HOSTS') + [
     'localhost',
     '127.0.0.1',
-    'meg-834055808010.herokuapp.com',
-    '.herokuapp.com',
 ]
-# Add staticfiles storage for production
+
+# CSRF settings - configure these via environment or add your domains here
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+
+# Add any hardcoded trusted origins if needed
+# Example: CSRF_TRUSTED_ORIGINS += ['https://yourdomain.com']
+
+# Static files settings
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# CSRF settings with proper origins
-CSRF_TRUSTED_ORIGINS = [
-    'https://meg-834055808010.herokuapp.com/',
 
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, "static"),
+    os.path.join(BASE_DIR, "theme/static"),
 ]
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
 
 # Session and cookie settings
 SESSION_COOKIE_SECURE = True

@@ -15,6 +15,23 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "django_extensions",
 ]
 
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, "static"),
+    os.path.join(BASE_DIR, "theme/static"),
+]
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+
 # Correct middleware order is important
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",

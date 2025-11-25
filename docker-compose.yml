@@ -1,0 +1,70 @@
+# =============================================================================
+# Docker Compose for Hetzner Deployment
+# =============================================================================
+# Usage:
+#   Development: docker-compose up
+#   Production:  docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# =============================================================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # Bind to localhost only - use Nginx as reverse proxy for external access
+      # Change to "8000:8000" if you want direct external access (not recommended for production)
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=poxed.settings.production
+    volumes:
+      # Persist SQLite database (if using SQLite for development)
+      # Comment this out if using PostgreSQL
+      - sqlite_data:/app/db.sqlite3
+      # Persist media files (if not using Cloudinary)
+      # - media_data:/app/media
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/login/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: PostgreSQL database for production
+  # Uncomment if you want to use PostgreSQL instead of external database
+  # db:
+  #   image: postgres:16-alpine
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=wagtail
+  #     - POSTGRES_USER=wagtail
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U wagtail"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # Optional: Nginx reverse proxy with SSL
+  # Uncomment for production with custom domain
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./certs:/etc/nginx/certs:ro
+  #   depends_on:
+  #     - web
+  #   restart: unless-stopped
+
+volumes:
+  sqlite_data:
+  # postgres_data:
+  # media_data:
