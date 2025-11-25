@@ -79,9 +79,19 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-# Use WhiteNoise without manifest - avoids missing file errors
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-
+# Override STORAGES from base.py - use WhiteNoise without manifest validation
+# CompressedStaticFilesStorage gives gzip compression without requiring manifest
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+    "wagtaildocs": {
+        "BACKEND": "cloudinary_storage.storage.RawMediaCloudinaryStorage",
+    }
+}
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),

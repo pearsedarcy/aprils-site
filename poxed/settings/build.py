@@ -10,9 +10,16 @@ SECRET_KEY = 'build-secret-key-not-for-production'
 
 ALLOWED_HOSTS = ['*']
 
-# Use simple static files storage during build - no manifest validation
+# Override STORAGES from base.py to use simple storage during build
 # This avoids the "calendar-icons.svg not found" error from Django admin CSS
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
