@@ -98,11 +98,15 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_DOMAIN = None
 
 # Database
+# Use SSL for external databases, but not for Docker internal connections
+database_url = env('DATABASE_URL')
+ssl_require = not (database_url and ('db:5432' in database_url or 'localhost' in database_url or '127.0.0.1' in database_url))
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=env('DATABASE_URL'),
+        default=database_url,
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=ssl_require
     )
 }
 

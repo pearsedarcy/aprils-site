@@ -19,12 +19,9 @@ services:
       - .env
     environment:
       - DJANGO_SETTINGS_MODULE=poxed.settings.production
-    volumes:
-      # Persist SQLite database (if using SQLite for development)
-      # Comment this out if using PostgreSQL
-      - sqlite_data:/app/db.sqlite3
-      # Persist media files (if not using Cloudinary)
-      # - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/login/')"]
@@ -33,22 +30,21 @@ services:
       retries: 3
       start_period: 40s
 
-  # Optional: PostgreSQL database for production
-  # Uncomment if you want to use PostgreSQL instead of external database
-  # db:
-  #   image: postgres:16-alpine
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_DB=wagtail
-  #     - POSTGRES_USER=wagtail
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U wagtail"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  # PostgreSQL database
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=wagtail
+      - POSTGRES_USER=wagtail
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wagtail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Optional: Nginx reverse proxy with SSL
   # Uncomment for production with custom domain
@@ -65,6 +61,4 @@ services:
   #   restart: unless-stopped
 
 volumes:
-  sqlite_data:
-  # postgres_data:
-  # media_data:
+  postgres_data:

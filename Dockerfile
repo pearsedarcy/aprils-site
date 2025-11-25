@@ -80,11 +80,12 @@ RUN chown -R wagtail:wagtail /app
 # Switch to non-root user
 USER wagtail
 
-# Collect static files (requires some env vars to be set, using dummy values for build)
+# Collect static files using build settings (simpler storage to avoid manifest issues)
 RUN DJANGO_SECRET_KEY=build-secret-key \
     CLOUDINARY_CLOUD_NAME=dummy \
     CLOUDINARY_API_KEY=dummy \
     CLOUDINARY_API_SECRET=dummy \
+    DJANGO_SETTINGS_MODULE=poxed.settings.build \
     python manage.py collectstatic --noinput --clear
 
 # Health check
