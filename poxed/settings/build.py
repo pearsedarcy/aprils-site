@@ -1,7 +1,6 @@
 """
 Build-time settings for Docker image creation.
-Uses a dummy database but the same static files storage as production
-to ensure the manifest is generated correctly.
+Uses simple static files storage that doesn't validate CSS references.
 """
 from .base import *
 import os
@@ -11,8 +10,9 @@ SECRET_KEY = 'build-secret-key-not-for-production'
 
 ALLOWED_HOSTS = ['*']
 
-# Use the same static files storage as production (WhiteNoise with manifest)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Use simple static files storage during build - no manifest validation
+# This avoids the "calendar-icons.svg not found" error from Django admin CSS
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
