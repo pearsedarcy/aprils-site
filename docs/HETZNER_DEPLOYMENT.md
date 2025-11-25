@@ -165,6 +165,91 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 ```
 
+---
+
+## Production Setup with Apache (Alternative)
+
+If your server already uses Apache (e.g., for WordPress), you can use Apache as the reverse proxy instead of Nginx.
+
+### 1. Enable Required Apache Modules
+
+```bash
+sudo a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests headers
+sudo systemctl restart apache2
+```
+
+### 2. Create Apache Virtual Host
+
+Create `/etc/apache2/sites-available/wagtail.conf`:
+
+```apache
+<VirtualHost *:80>
+    ServerName stage.yourdomain.com
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
+
+    RequestHeader set X-Forwarded-Proto "http"
+    RequestHeader set X-Forwarded-For "%{REMOTE_ADDR}s"
+
+    ErrorLog ${APACHE_LOG_DIR}/wagtail_error.log
+    CustomLog ${APACHE_LOG_DIR}/wagtail_access.log combined
+</VirtualHost>
+```
+
+### 3. Enable Site and Get SSL
+
+```bash
+# Enable the site
+sudo a2ensite wagtail.conf
+
+# Test configuration
+sudo apache2ctl configtest
+
+# Reload Apache
+sudo systemctl reload apache2
+
+# Get SSL certificate (this will auto-configure the HTTPS virtual host)
+sudo certbot --apache -d stage.yourdomain.com
+```
+
+After certbot runs, it will create an SSL-enabled virtual host that looks like:
+
+```apache
+<VirtualHost *:443>
+    ServerName stage.yourdomain.com
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
+
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-For "%{REMOTE_ADDR}s"
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/stage.yourdomain.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/stage.yourdomain.com/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+
+    ErrorLog ${APACHE_LOG_DIR}/wagtail_error.log
+    CustomLog ${APACHE_LOG_DIR}/wagtail_access.log combined
+</VirtualHost>
+```
+
+### 4. Update Environment Variables
+
+Ensure your `.env` file has the correct settings:
+
+```env
+ALLOWED_HOSTS=stage.yourdomain.com
+CSRF_TRUSTED_ORIGINS=https://stage.yourdomain.com
+```
+
+**Important:** `CSRF_TRUSTED_ORIGINS` must include the `https://` prefix.
+
+---
+
 ## Using PostgreSQL Database
 
 PostgreSQL is **included by default** in docker-compose.yml. The database runs as a separate container and the web service automatically waits for it to be ready.
@@ -222,6 +307,55 @@ docker compose exec db pg_dump -U wagtail wagtail > backup.sql
 cat backup.sql | docker compose exec -T db psql -U wagtail wagtail
 ```
 
+---
+
+## Debugging the Container
+
+### Inspect Container Filesystem
+
+```bash
+# Open a shell inside the running container
+sudo docker compose exec web sh
+
+# Check what's in the app directory
+ls -la /app/
+
+# Check if static files were collected
+ls -la /app/staticfiles/
+
+# Count static files
+find /app/staticfiles -type f | wc -l
+
+# Check if Tailwind CSS was built
+ls -la /app/theme/static/css/dist/
+
+# Check the Django settings being used
+echo $DJANGO_SETTINGS_MODULE
+
+# View settings values
+python manage.py shell --settings=poxed.settings.build -c "from django.conf import settings; print('STATIC_ROOT:', settings.STATIC_ROOT)"
+```
+
+### Verify Static Files Discovery
+
+```bash
+# Check if Django can find specific static files
+python manage.py findstatic wagtailadmin/css/core.css --settings=poxed.settings.build
+python manage.py findstatic css/dist/styles.css --settings=poxed.settings.build
+
+# List all static files Django can find
+python manage.py shell --settings=poxed.settings.build -c "
+from django.contrib.staticfiles import finders
+count = 0
+for finder in finders.get_finders():
+    for path, storage in finder.list([]):
+        count += 1
+print(f'Total static files found: {count}')
+"
+```
+
+---
+
 ## Troubleshooting
 
 ### Container won't start
@@ -250,6 +384,39 @@ The Docker build uses a special `build.py` settings file that avoids WhiteNoise 
 # Force rebuild without cache
 docker compose build --no-cache
 ```
+
+### Static files show 0 copied / collectstatic not working
+
+If `collectstatic` reports "0 static files copied" even though Django finds files, this is a known issue. You can manually copy static files inside the container:
+
+```bash
+# Enter the container
+sudo docker compose exec web sh
+
+# Create staticfiles directory if it doesn't exist
+mkdir -p /app/staticfiles
+
+# Copy static files from all sources
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/admin/static/* /app/staticfiles/
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/images/static/* /app/staticfiles/
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/snippets/static/* /app/staticfiles/
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/users/static/* /app/staticfiles/
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/embeds/static/* /app/staticfiles/
+cp -r /usr/local/lib/python3.12/site-packages/wagtail/documents/static/* /app/staticfiles/ 2>/dev/null || true
+cp -r /usr/local/lib/python3.12/site-packages/django/contrib/admin/static/* /app/staticfiles/
+cp -r /app/poxed/static/* /app/staticfiles/
+cp -r /app/theme/static/* /app/staticfiles/
+cp -r /app/home/static/* /app/staticfiles/ 2>/dev/null || true
+
+# Verify files were copied
+find /app/staticfiles -type f | wc -l
+
+# Exit container and restart
+exit
+sudo docker compose restart web
+```
+
+**Note:** This is a workaround. The static files will persist until the container is recreated. After a rebuild, you may need to repeat this process.
 
 ### 502 Bad Gateway
 - Check if the web container is running: `docker compose ps`
